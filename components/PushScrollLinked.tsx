@@ -7,8 +7,8 @@ import {
   useTransform,
   SpringOptions,
 } from 'framer-motion';
-import { _SCREEN_SIZE, _LAYOUT_VARIANTS } from './constants';
-import { Direction } from './Direction';
+import { _FLEX_DIRECTION_VARIANTS } from './constants';
+import { Direction } from './types';
 import StickyScrollLinked from './StickyScrollLinked';
 
 type Props = {
@@ -48,17 +48,16 @@ function PushScrollLinked({
 
     return (
       <motion.div
-        className={`flex ${_LAYOUT_VARIANTS[direction]} min-w-fit max-w-fit min-h-fit max-h-fit`}
-        style={
-          direction === 'left' || direction === 'right'
-            ? { x: push }
-            : { y: push }
-        }
+        className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} fit`}
+        style={{
+          x: direction === 'left' || direction === 'right' ? push : undefined,
+          y: direction === 'up' || direction === 'down' ? push : undefined,
+        }}
       >
         {React.Children.toArray(children)
           .slice(0, sketchesCount)
           .map((v) => (
-            <div className={`relative ${_SCREEN_SIZE}`}>{v}</div>
+            <div className='relative viewport'>{v}</div>
           ))}
       </motion.div>
     );

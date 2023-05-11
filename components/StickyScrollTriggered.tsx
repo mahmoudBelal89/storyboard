@@ -2,7 +2,6 @@
 
 import { ReactNode, useRef } from 'react';
 import { MotionValue, useScroll, useTransform } from 'framer-motion';
-import { _SCREEN_SIZE } from './constants';
 
 type defaultProps = {
   sketchesCount: number;
@@ -54,9 +53,9 @@ function StickyScrollTriggered({
         maxHeight: height,
         backgroundColor: backgroundColor,
       }}
-      className='min-w-[100vw] max-w-[100vw]'
+      className='viewport-width'
     >
-      <div className={`sticky top-0 ${_SCREEN_SIZE} overflow-hidden`}>
+      <div className='sticky-viewport'>
         {children(scrollYProgress, {
           sketchesCount,
           height,

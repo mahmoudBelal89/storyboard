@@ -7,8 +7,11 @@ import {
   useMotionValueEvent,
   Transition,
 } from 'framer-motion';
-import { Direction } from '../components/Direction';
-import { _SCREEN_SIZE, _LAYOUT_VARIANTS } from '../components/constants';
+import { Direction } from '../components/types';
+import {
+  _SCREEN_SIZE,
+  _FLEX_DIRECTION_VARIANTS,
+} from '../components/constants';
 
 type Props = {
   direction?: Direction;
@@ -50,7 +53,7 @@ function PushScrollTriggered({
     >
       <div className={`sticky top-0 ${_SCREEN_SIZE} overflow-hidden`}>
         <motion.div
-          className={`flex ${_LAYOUT_VARIANTS[direction]} min-w-fit max-w-fit min-h-fit max-h-fit`}
+          className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} min-w-fit max-w-fit min-h-fit max-h-fit`}
           initial={
             direction === 'right'
               ? { x: '-100vw' }

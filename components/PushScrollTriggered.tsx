@@ -7,8 +7,8 @@ import {
   useMotionValueEvent,
   Transition,
 } from 'framer-motion';
-import { _SCREEN_SIZE, _LAYOUT_VARIANTS } from './constants';
-import { Direction } from './Direction';
+import { _FLEX_DIRECTION_VARIANTS } from './constants';
+import { Direction } from './types';
 import StickyScrollTriggered from './StickyScrollTriggered';
 
 type Props = {
@@ -39,29 +39,37 @@ function PushScrollTriggered({
 
     return (
       <motion.div
-        className={`flex ${_LAYOUT_VARIANTS[direction]} min-w-fit max-w-fit min-h-fit max-h-fit`}
-        initial={
-          direction === 'right'
-            ? { x: -100 * (sketchesCount! - 1) + 'vw' }
-            : direction === 'down'
-            ? { y: -100 * (sketchesCount! - 1) + 'vh' }
-            : {}
-        }
-        animate={
-          direction === 'left'
-            ? { x: -push * 100 + 'vw' }
-            : direction === 'up'
-            ? { y: -push * 100 + 'vh' }
-            : direction === 'right'
-            ? { x: push * 100 - 100 * (sketchesCount! - 1) + 'vw' }
-            : { y: push * 100 - 100 * (sketchesCount! - 1) + 'vh' } // direction === 'down'
-        }
+        className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} fit`}
+        initial={{
+          x:
+            direction === 'right'
+              ? -100 * (sketchesCount! - 1) + 'vw'
+              : undefined,
+          y:
+            direction === 'down'
+              ? -100 * (sketchesCount! - 1) + 'vh'
+              : undefined,
+        }}
+        animate={{
+          x:
+            direction === 'left'
+              ? -push * 100 + 'vw'
+              : direction === 'right'
+              ? push * 100 - 100 * (sketchesCount! - 1) + 'vw'
+              : undefined,
+          y:
+            direction === 'up'
+              ? -push * 100 + 'vh'
+              : direction === 'down'
+              ? push * 100 - 100 * (sketchesCount! - 1) + 'vh'
+              : undefined,
+        }}
         transition={transition}
       >
         {React.Children.toArray(children)
           .slice(0, sketchesCount)
           .map((v) => (
-            <div className={`relative ${_SCREEN_SIZE}`}>{v}</div>
+            <div className='relative viewport'>{v}</div>
           ))}
       </motion.div>
     );
