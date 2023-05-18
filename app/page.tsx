@@ -7,11 +7,42 @@ import { motion, useTransform } from 'framer-motion';
 import PushScrollTriggered from '@/components/PushScrollTriggered';
 import FadeScrollLinked from '@/components/FadeScrollLinked';
 
+import Image from 'next/image';
+import FighterImage from '../resources/images/fighter.jpg';
+import HouseImage from '../resources/images/house.png';
+import SpaceImage from '../resources/images/space.png';
+import TreesImage from '../resources/images/trees.jpg';
+import UmbrellaImage from '../resources/images/umbrella.jpg';
+import FadeScrollTriggered from '@/components/FadeScrollTriggered';
+
 export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <FadeScrollLinked backgroundColor='white' sketchesCount={5}>
+      <FadeScrollTriggered
+        backgroundColor='black'
+        sketchesCount={5}
+        fadeConfig='throughColor'
+        transition={{ duration: 5 }}
+      >
+        {/* <Image
+          src={FighterImage}
+          alt='fighter'
+          className='viewport object-scale-down'
+        />
+        <Image src={HouseImage} alt='house' className='viewport object-cover' />
+        <Image
+          src={SpaceImage}
+          alt='space'
+          className='viewport object-scale-down'
+        />
+        <Image src={TreesImage} alt='trees' className='viewport object-cover' />
+        <Image
+          src={UmbrellaImage}
+          alt='umbrella'
+          className='viewport object-scale-down'
+        /> */}
+
         <div className=' viewport'>
           <div className='m-4 bg-red-900 border rounded-2xl w-96 h-96'>
             <button
@@ -56,7 +87,23 @@ export default function Home() {
             the fifth guy
           </button>
         </div>
-      </FadeScrollLinked>
+      </FadeScrollTriggered>
+      <div className='w-screen h-[300vh] bg-blue-800'></div>
+      <PushScrollTriggered backgroundColor='white' sketchesCount={5}>
+        <Image
+          src={FighterImage}
+          alt='fighter'
+          className='viewport object-cover'
+        />
+        <Image src={HouseImage} alt='house' className='viewport object-cover' />
+        <Image src={SpaceImage} alt='space' className='viewport object-cover' />
+        <Image src={TreesImage} alt='trees' className='viewport object-cover' />
+        <Image
+          src={UmbrellaImage}
+          alt='umbrella'
+          className='viewport object-cover'
+        />
+      </PushScrollTriggered>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <PushScrollTriggered
         direction='left'
