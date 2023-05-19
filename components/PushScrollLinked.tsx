@@ -9,7 +9,9 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from './constants';
 import { Direction } from './types';
-import StickyScrollLinked from './StickyScrollLinked';
+import StoryboardScrollLinked, {
+  StoryboardScrollLinkedDefaultProps,
+} from './StoryboardScrollLinked';
 
 type Props = {
   direction?: Direction;
@@ -25,7 +27,7 @@ type Props = {
 
 function PushScrollLinked({
   direction = 'left',
-  sketchesCount,
+  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
   height,
   backgroundColor,
   offset,
@@ -34,8 +36,7 @@ function PushScrollLinked({
   springConfig,
   children,
 }: Props) {
-  const render = (scrollProgress: MotionValue<number>, defaultProps: any) => {
-    sketchesCount = sketchesCount ?? defaultProps.sketchesCount;
+  const render = (scrollProgress: MotionValue<number>) => {
     const push = useTransform(scrollProgress, (v) => {
       return direction === 'left'
         ? -v * 100 + 'vw'
@@ -64,7 +65,7 @@ function PushScrollLinked({
   };
 
   return (
-    <StickyScrollLinked
+    <StoryboardScrollLinked
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -74,7 +75,7 @@ function PushScrollLinked({
       springConfig={springConfig}
     >
       {render}
-    </StickyScrollLinked>
+    </StoryboardScrollLinked>
   );
 }
 export default PushScrollLinked;

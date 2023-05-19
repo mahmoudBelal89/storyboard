@@ -3,7 +3,7 @@
 import React, { ReactNode } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
-import StickyScrollLinked from '../components/StickyScrollLinked';
+import StoryboardScrollLinked from '../components/StoryboardScrollLinked';
 
 type Props = {
   sketchesCount?: number;
@@ -54,7 +54,7 @@ function FadeScrollLinked({
   };
 
   return (
-    <StickyScrollLinked
+    <StoryboardScrollLinked
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -62,7 +62,7 @@ function FadeScrollLinked({
       transitionExtent={transitionExtent}
     >
       {render}
-    </StickyScrollLinked>
+    </StoryboardScrollLinked>
   );
 }
 export default FadeScrollLinked;

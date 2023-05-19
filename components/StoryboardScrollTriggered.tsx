@@ -3,30 +3,26 @@
 import { ReactNode, useRef } from 'react';
 import { MotionValue, useScroll, useTransform } from 'framer-motion';
 
-type defaultProps = {
-  sketchesCount: number;
-  height: string;
-  offset: any;
+export const StoryboardScrollTriggeredDefaultProps = {
+  sketchesCount: 2,
+  height: (sketchesCount: number) => sketchesCount * 100 + 200 + 'vh',
+  offset: ['0 0', '1 1'],
 };
 type Props = {
   sketchesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
-  children: (
-    scrollProgress: MotionValue<number>,
-    defaultProps: defaultProps
-  ) => ReactNode;
+  children: (scrollProgress: MotionValue<number>) => ReactNode;
 };
 
-function StickyScrollTriggered({
-  sketchesCount = 2,
-  height,
+function StoryboardScrollTriggered({
+  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
+  height = StoryboardScrollTriggeredDefaultProps.height(sketchesCount),
   backgroundColor,
-  offset = ['0 0', '1 1'],
+  offset = StoryboardScrollTriggeredDefaultProps.offset,
   children,
 }: Props) {
-  height = height ?? sketchesCount * 100 + 200 + 'vh';
   const root = useRef(null);
   let { scrollYProgress } = useScroll({
     target: root,
@@ -48,21 +44,15 @@ function StickyScrollTriggered({
   return (
     <div
       ref={root}
+      className='viewport-width'
       style={{
         minHeight: height,
         maxHeight: height,
         backgroundColor: backgroundColor,
       }}
-      className='viewport-width'
     >
-      <div className='sticky-viewport'>
-        {children(scrollYProgress, {
-          sketchesCount,
-          height,
-          offset,
-        })}
-      </div>
+      <div className='sticky-viewport'>{children(scrollYProgress)}</div>
     </div>
   );
 }
-export default StickyScrollTriggered;
+export default StoryboardScrollTriggered;

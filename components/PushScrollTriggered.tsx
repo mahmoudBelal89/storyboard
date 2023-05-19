@@ -9,7 +9,7 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from './constants';
 import { Direction } from './types';
-import StickyScrollTriggered from './StickyScrollTriggered';
+import StoryboardScrollTriggered from './StoryboardScrollTriggered';
 
 type Props = {
   direction?: Direction;
@@ -76,14 +76,14 @@ function PushScrollTriggered({
   };
 
   return (
-    <StickyScrollTriggered
+    <StoryboardScrollTriggered
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
     >
       {render}
-    </StickyScrollTriggered>
+    </StoryboardScrollTriggered>
   );
 }
 export default PushScrollTriggered;

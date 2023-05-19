@@ -1,8 +1,8 @@
 'use client';
 
-import StickyScrollTriggered from '@/components/StickyScrollTriggered';
+import StoryboardScrollTriggered from '@/components/StoryboardScrollTriggered';
 import PushScrollLinked from '@/components/PushScrollLinked';
-import StickyScrollLinked from '@/components/StickyScrollLinked';
+import StoryboardScrollLinked from '@/components/StoryboardScrollLinked';
 import { motion, useTransform } from 'framer-motion';
 import PushScrollTriggered from '@/components/PushScrollTriggered';
 import FadeScrollLinked from '@/components/FadeScrollLinked';
@@ -20,9 +20,8 @@ export default function Home() {
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <FadeScrollTriggered
-        backgroundColor='black'
         sketchesCount={5}
-        fadeConfig='throughColor'
+        //fadeConfig='throughColor'
         transition={{ duration: 5 }}
       >
         {/* <Image

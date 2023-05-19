@@ -9,12 +9,13 @@ import {
   SpringOptions,
 } from 'framer-motion';
 
-type defaultProps = {
-  sketchesCount: number;
-  height: string;
-  offset: any;
-  transitionExtent: number;
-  isSpring: boolean;
+export const StoryboardScrollLinkedDefaultProps = {
+  sketchesCount: 2,
+  height: (sketchesCount: number) => sketchesCount * 200 + 200 + 'vh',
+  offset: (sketchesCount: number) =>
+    sketchesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
+  transitionExtent: 1,
+  isSpring: false,
 };
 type Props = {
   sketchesCount?: number;
@@ -24,24 +25,19 @@ type Props = {
   transitionExtent?: number;
   isSpring?: boolean;
   springConfig?: SpringOptions;
-  children: (
-    scrollProgress: MotionValue<number>,
-    defaultProps: defaultProps
-  ) => ReactNode;
+  children: (scrollProgress: MotionValue<number>) => ReactNode;
 };
 
-function StickyScrollLinked({
-  sketchesCount = 2,
-  height,
+function StoryboardScrollLinked({
+  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
+  height = StoryboardScrollLinkedDefaultProps.height(sketchesCount),
   backgroundColor,
-  offset,
-  transitionExtent = 1,
-  isSpring = false,
+  offset = StoryboardScrollLinkedDefaultProps.offset(sketchesCount),
+  transitionExtent = StoryboardScrollLinkedDefaultProps.transitionExtent,
+  isSpring = StoryboardScrollLinkedDefaultProps.isSpring,
   springConfig,
   children,
 }: Props) {
-  height = height ?? sketchesCount * 200 + 200 + 'vh';
-  offset = offset ?? sketchesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'];
   const root = useRef(null);
   let { scrollYProgress } = useScroll({
     target: root,
@@ -67,23 +63,15 @@ function StickyScrollLinked({
   return (
     <div
       ref={root}
+      className='viewport-width'
       style={{
         minHeight: height,
         maxHeight: height,
         backgroundColor: backgroundColor,
       }}
-      className='viewport-width'
     >
-      <div className='sticky-viewport'>
-        {children(scrollYProgress, {
-          sketchesCount,
-          height,
-          offset,
-          transitionExtent,
-          isSpring,
-        })}
-      </div>
+      <div className='sticky-viewport'>{children(scrollYProgress)}</div>
     </div>
   );
 }
-export default StickyScrollLinked;
+export default StoryboardScrollLinked;

@@ -14,8 +14,9 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from './constants';
 import { FadeOptions } from './types';
-import StickyScrollTriggered from './StickyScrollTriggered';
+import { StoryboardScrollTriggeredDefaultProps } from './StoryboardScrollTriggered';
 import { offsetAnimation } from './transform';
+import SketchesScrollTriggered from './SketchesScrollTriggered';
 
 type Props = {
   sketchesCount?: number;
@@ -23,12 +24,12 @@ type Props = {
   fadeConfig?: FadeOptions;
   backgroundColor?: string;
   offset?: any;
-  transition?: Transition | ValueAnimationTransition<number>;
+  transition?: ValueAnimationTransition<number>;
   children: ReactNode;
 };
 
 function FadeScrollTriggered({
-  sketchesCount,
+  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
   height,
   fadeConfig = 'smoothly',
   backgroundColor,
@@ -36,63 +37,32 @@ function FadeScrollTriggered({
   transition,
   children,
 }: Props) {
-  const render = (scrollProgress: MotionValue<number>, defaultProps: any) => {
-    sketchesCount = sketchesCount ?? defaultProps.sketchesCount;
-    const [coverDisplay, setCoverDisplay] = useState<'block' | 'hidden'>(
-      'hidden'
+  const render = (
+    sketch: ReactNode,
+    index: number,
+    motionProgress: MotionValue<number>,
+    storyboardScrollProgress: MotionValue<number>
+  ) => {
+    const opacity = useTransform(motionProgress, [-1, 0, 1], [0, 1, 0]);
+
+    return (
+      <motion.div className='absolute viewport' style={{ opacity: opacity }}>
+        {sketch}
+      </motion.div>
     );
-
-    return [
-      <div className={`${coverDisplay} absolute viewport z-[2]`} />,
-      React.Children.toArray(children)
-        .slice(0, sketchesCount)
-        .map((v, i) => {
-          const opacity = offsetAnimation(
-            scrollProgress,
-            (v) => v === i,
-            0.5,
-            i === 0 ? 1 : 0,
-            transition as ValueAnimationTransition<number>
-          );
-          useMotionValueEvent(opacity, 'change', (v) => {
-            console.log(v);
-            if (Number.isInteger(v)) {
-              setCoverDisplay('hidden');
-            } else {
-              setCoverDisplay('block');
-            }
-          });
-
-          const display = useTransform(opacity, (v) =>
-            v === 0 ? 'none' : 'block'
-          );
-          const zIndex = fadeConfig
-            ? useTransform(scrollProgress, (v) =>
-                v > i - 1 && v <= i ? 1 : -1
-              )
-            : undefined;
-
-          return (
-            <motion.div
-              style={{ opacity: opacity, display: display, zIndex: zIndex }}
-              className='absolute viewport'
-            >
-              {v}
-            </motion.div>
-          );
-        }),
-    ];
   };
 
   return (
-    <StickyScrollTriggered
+    <SketchesScrollTriggered
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
+      transition={transition}
+      isDisabledWhileTransition={true}
     >
-      {render}
-    </StickyScrollTriggered>
+      {{ sketches: children, render: render }}
+    </SketchesScrollTriggered>
   );
 }
 export default FadeScrollTriggered;
