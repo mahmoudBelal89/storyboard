@@ -8,9 +8,10 @@ import {
   useMotionValueEvent,
   useTransform,
 } from 'framer-motion';
-import { ScrollDirection } from './types';
 
-export function getPreviousValue<T>(motionValue: MotionValue<T>) {
+type ScrollDirection = 'down' | 'up' | 'none';
+
+function getPreviousValue<T>(motionValue: MotionValue<T>) {
   const previousValue = useRef<T>();
   return useTransform(motionValue, (v) => {
     let prevV = previousValue.current;
@@ -19,7 +20,7 @@ export function getPreviousValue<T>(motionValue: MotionValue<T>) {
   });
 }
 
-export function getScrollDirectionOfStickyScrollLinked(
+function getScrollDirectionOfStickyScrollLinked(
   scrollProgress: MotionValue<number>
 ) {
   const previousValue = useRef<number>();
@@ -47,7 +48,7 @@ export function getScrollDirectionOfStickyScrollLinked(
   });
 }
 
-export function offsetAnimation(
+function offsetAnimation(
   scrollProgress: MotionValue<number>,
   condition: (v: number) => boolean,
   offset: number,

@@ -4,7 +4,7 @@ import React, { ReactNode, useRef } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
 import StoryboardScrollLinked from '../components/StoryboardScrollLinked';
-import { getScrollDirectionOfStickyScrollLinked } from '../components/transform';
+import { getScrollDirectionOfStickyScrollLinked } from './transform';
 
 type Props = {
   sketchesCount?: number;

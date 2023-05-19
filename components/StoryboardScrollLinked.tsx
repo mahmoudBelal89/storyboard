@@ -17,6 +17,7 @@ export const StoryboardScrollLinkedDefaultProps = {
   transitionExtent: 1,
   isSpring: false,
 };
+const Default = StoryboardScrollLinkedDefaultProps;
 type Props = {
   sketchesCount?: number;
   height?: string;
@@ -29,12 +30,12 @@ type Props = {
 };
 
 function StoryboardScrollLinked({
-  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
-  height = StoryboardScrollLinkedDefaultProps.height(sketchesCount),
+  sketchesCount = Default.sketchesCount,
+  height = Default.height(sketchesCount),
   backgroundColor,
-  offset = StoryboardScrollLinkedDefaultProps.offset(sketchesCount),
-  transitionExtent = StoryboardScrollLinkedDefaultProps.transitionExtent,
-  isSpring = StoryboardScrollLinkedDefaultProps.isSpring,
+  offset = Default.offset(sketchesCount),
+  transitionExtent = Default.transitionExtent,
+  isSpring = Default.isSpring,
   springConfig,
   children,
 }: Props) {

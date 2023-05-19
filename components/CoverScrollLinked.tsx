@@ -2,24 +2,21 @@
 
 import { ReactNode } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
-import { FadeOptions } from './types';
 import SketchesScrollLinked from './SketchesScrollLinked';
 
 type Props = {
   sketchesCount?: number;
   height?: string;
-  fadeConfig?: FadeOptions;
   backgroundColor?: string;
   offset?: any;
   transitionExtent?: number;
   children: ReactNode;
 };
 
-function FadeScrollLinked({
+function CoverScrollLinked({
   sketchesCount,
   height,
-  fadeConfig = 'smoothly',
-  backgroundColor = 'black',
+  backgroundColor,
   offset,
   transitionExtent,
   children,
@@ -30,16 +27,14 @@ function FadeScrollLinked({
     scrollProgress: MotionValue<number>,
     storyboardScrollProgress: MotionValue<number>
   ) => {
-    const opacity =
-      fadeConfig === 'smoothly'
-        ? useTransform(scrollProgress, [-1, 0, 1], [0, 1, 0])
-        : useTransform(scrollProgress, [-0.45, 0, 0.45], [0, 1, 0]);
+    const xNumber = useTransform(scrollProgress, [-1, 0], [100, 0]);
+    const x = useTransform(xNumber, (v) => v + 'vw');
 
     return (
       <motion.div
         className='absolute viewport'
         style={{
-          opacity: opacity,
+          x: x,
         }}
       >
         {sketch}
@@ -59,4 +54,4 @@ function FadeScrollLinked({
     </SketchesScrollLinked>
   );
 }
-export default FadeScrollLinked;
+export default CoverScrollLinked;

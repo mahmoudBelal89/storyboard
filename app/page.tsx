@@ -14,15 +14,17 @@ import SpaceImage from '../resources/images/space.png';
 import TreesImage from '../resources/images/trees.jpg';
 import UmbrellaImage from '../resources/images/umbrella.jpg';
 import FadeScrollTriggered from '@/components/FadeScrollTriggered';
+import CoverScrollLinked from '@/components/CoverScrollLinked';
+import CoverScrollTriggered from '@/components/CoverScrollTriggered';
 
 export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <FadeScrollTriggered
+      <CoverScrollTriggered
         sketchesCount={5}
         //fadeConfig='throughColor'
-        transition={{ duration: 5 }}
+        transition={{ duration: 2 }}
       >
         {/* <Image
           src={FighterImage}
@@ -86,7 +88,7 @@ export default function Home() {
             the fifth guy
           </button>
         </div>
-      </FadeScrollTriggered>
+      </CoverScrollTriggered>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <PushScrollTriggered backgroundColor='white' sketchesCount={5}>
         <Image

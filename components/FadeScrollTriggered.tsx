@@ -1,21 +1,13 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import {
   motion,
   MotionValue,
-  useMotionValueEvent,
-  Transition,
-  useAnimate,
-  ValueAnimationTransition,
-  motionValue,
-  animate,
   useTransform,
+  ValueAnimationTransition,
 } from 'framer-motion';
-import { _FLEX_DIRECTION_VARIANTS } from './constants';
 import { FadeOptions } from './types';
-import { StoryboardScrollTriggeredDefaultProps } from './StoryboardScrollTriggered';
-import { offsetAnimation } from './transform';
 import SketchesScrollTriggered from './SketchesScrollTriggered';
 
 type Props = {
@@ -29,10 +21,10 @@ type Props = {
 };
 
 function FadeScrollTriggered({
-  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
+  sketchesCount,
   height,
   fadeConfig = 'smoothly',
-  backgroundColor,
+  backgroundColor = 'black',
   offset,
   transition,
   children,
@@ -43,7 +35,10 @@ function FadeScrollTriggered({
     motionProgress: MotionValue<number>,
     storyboardScrollProgress: MotionValue<number>
   ) => {
-    const opacity = useTransform(motionProgress, [-1, 0, 1], [0, 1, 0]);
+    const opacity =
+      fadeConfig === 'smoothly'
+        ? useTransform(motionProgress, [-1, 0, 1], [0, 1, 0])
+        : useTransform(motionProgress, [-0.45, 0, 0.45], [0, 1, 0]);
 
     return (
       <motion.div className='absolute viewport' style={{ opacity: opacity }}>
@@ -59,7 +54,6 @@ function FadeScrollTriggered({
       backgroundColor={backgroundColor}
       offset={offset}
       transition={transition}
-      isDisabledWhileTransition={true}
     >
       {{ sketches: children, render: render }}
     </SketchesScrollTriggered>

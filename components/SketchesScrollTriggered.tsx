@@ -2,12 +2,12 @@
 
 import React, { ReactNode } from 'react';
 import {
-  animate,
   motion,
   motionValue,
   MotionValue,
   useMotionValueEvent,
   useTransform,
+  animate,
   ValueAnimationTransition,
 } from 'framer-motion';
 import StoryboardScrollTriggered, {
@@ -16,8 +16,9 @@ import StoryboardScrollTriggered, {
 
 export const SketchesScrollTriggeredDefaultProps = {
   isZIndexNegative: false,
-  isDisabledWhileTransition: false,
+  isDisabledWhileTransition: true,
 };
+const Default = SketchesScrollTriggeredDefaultProps;
 type Props = {
   sketchesCount?: number;
   height?: string;
@@ -43,8 +44,8 @@ function SketchesScrollTriggered({
   backgroundColor,
   offset,
   transition,
-  isZIndexNegative = SketchesScrollTriggeredDefaultProps.isZIndexNegative,
-  isDisabledWhileTransition = SketchesScrollTriggeredDefaultProps.isDisabledWhileTransition,
+  isZIndexNegative = Default.isZIndexNegative,
+  isDisabledWhileTransition = Default.isDisabledWhileTransition,
   children,
 }: Props) {
   const render = (storyboardScrollProgress: MotionValue<number>) => {

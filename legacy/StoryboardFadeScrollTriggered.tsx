@@ -17,7 +17,7 @@ import { FadeOptions } from '../components/types';
 import StoryboardScrollTriggered, {
   StoryboardScrollTriggeredDefaultProps,
 } from '../components/StoryboardScrollTriggered';
-import { offsetAnimation } from '../components/transform';
+import { offsetAnimation } from './transform';
 
 type Props = {
   sketchesCount?: number;

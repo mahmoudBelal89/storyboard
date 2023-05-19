@@ -8,6 +8,7 @@ export const StoryboardScrollTriggeredDefaultProps = {
   height: (sketchesCount: number) => sketchesCount * 100 + 200 + 'vh',
   offset: ['0 0', '1 1'],
 };
+const Default = StoryboardScrollTriggeredDefaultProps;
 type Props = {
   sketchesCount?: number;
   height?: string;
@@ -17,10 +18,10 @@ type Props = {
 };
 
 function StoryboardScrollTriggered({
-  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
-  height = StoryboardScrollTriggeredDefaultProps.height(sketchesCount),
+  sketchesCount = Default.sketchesCount,
+  height = Default.height(sketchesCount),
   backgroundColor,
-  offset = StoryboardScrollTriggeredDefaultProps.offset,
+  offset = Default.offset,
   children,
 }: Props) {
   const root = useRef(null);
