@@ -7,10 +7,13 @@ import {
   useTransform,
   ValueAnimationTransition,
 } from 'framer-motion';
-import SketchesScrollTriggered from './SketchesScrollTriggered';
+import { Direction } from './types';
+import { xy } from './helper';
+import Act from './Act';
 
 type Props = {
-  sketchesCount?: number;
+  direction?: Direction;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
@@ -18,8 +21,9 @@ type Props = {
   children: ReactNode;
 };
 
-function CoverScrollTriggered({
-  sketchesCount,
+function Cover({
+  direction = 'left',
+  scenesCount,
   height,
   backgroundColor,
   offset,
@@ -27,36 +31,40 @@ function CoverScrollTriggered({
   children,
 }: Props) {
   const render = (
-    sketch: ReactNode,
+    scene: ReactNode,
     index: number,
-    motionProgress: MotionValue<number>,
-    storyboardScrollProgress: MotionValue<number>
+    transitionProgress: MotionValue<number>,
+    scrollProgress: MotionValue<number>
   ) => {
-    const xNumber = useTransform(motionProgress, [-1, 0], [100, 0]);
-    const x = useTransform(xNumber, (v) => v + 'vw');
+    const position =
+      direction === 'left' || direction === 'up'
+        ? useTransform(transitionProgress, [-1, 0], [100, 0])
+        : useTransform(transitionProgress, [-1, 0], [-100, 0]);
+    const [x, y] = xy(direction, position);
 
     return (
       <motion.div
         className='absolute viewport'
         style={{
           x: x,
+          y: y,
         }}
       >
-        {sketch}
+        {scene}
       </motion.div>
     );
   };
 
   return (
-    <SketchesScrollTriggered
-      sketchesCount={sketchesCount}
+    <Act
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
       transition={transition}
     >
-      {{ sketches: children, render: render }}
-    </SketchesScrollTriggered>
+      {{ scenes: children, render: render }}
+    </Act>
   );
 }
-export default CoverScrollTriggered;
+export default Cover;

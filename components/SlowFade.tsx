@@ -3,10 +3,10 @@
 import { ReactNode } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { FadeOptions } from './types';
-import SketchesScrollLinked from './SketchesScrollLinked';
+import SlowAct from './SlowAct';
 
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   fadeConfig?: FadeOptions;
   backgroundColor?: string;
@@ -15,8 +15,8 @@ type Props = {
   children: ReactNode;
 };
 
-function FadeScrollLinked({
-  sketchesCount,
+function SlowFade({
+  scenesCount,
   height,
   fadeConfig = 'smoothly',
   backgroundColor = 'black',
@@ -25,15 +25,15 @@ function FadeScrollLinked({
   children,
 }: Props) {
   const render = (
-    sketch: ReactNode,
+    scene: ReactNode,
     index: number,
-    scrollProgress: MotionValue<number>,
-    storyboardScrollProgress: MotionValue<number>
+    transitionProgress: MotionValue<number>,
+    scrollProgress: MotionValue<number>
   ) => {
     const opacity =
       fadeConfig === 'smoothly'
-        ? useTransform(scrollProgress, [-1, 0, 1], [0, 1, 0])
-        : useTransform(scrollProgress, [-0.45, 0, 0.45], [0, 1, 0]);
+        ? useTransform(transitionProgress, [-1, 0, 1], [0, 1, 0])
+        : useTransform(transitionProgress, [-0.45, 0, 0.45], [0, 1, 0]);
 
     return (
       <motion.div
@@ -42,21 +42,22 @@ function FadeScrollLinked({
           opacity: opacity,
         }}
       >
-        {sketch}
+        {scene}
       </motion.div>
     );
   };
 
   return (
-    <SketchesScrollLinked
-      sketchesCount={sketchesCount}
+    <SlowAct
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
       transitionExtent={transitionExtent}
+      isSpring={false}
     >
-      {{ sketches: children, render: render }}
-    </SketchesScrollLinked>
+      {{ scenes: children, render: render }}
+    </SlowAct>
   );
 }
-export default FadeScrollLinked;
+export default SlowFade;

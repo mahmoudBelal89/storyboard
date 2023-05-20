@@ -9,9 +9,7 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
 import { FadeOptions } from '../components/types';
-import StoryboardScrollLinked, {
-  StoryboardScrollLinkedDefaultProps,
-} from '../components/StoryboardScrollLinked';
+import SlowPlay, { SlowPlayDefaultProps } from '../components/SlowPlay';
 
 type Props = {
   sketchesCount?: number;
@@ -24,7 +22,7 @@ type Props = {
 };
 
 function FadeScrollLinked({
-  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
+  sketchesCount = SlowPlayDefaultProps.sketchesCount,
   height,
   fadeConfig = 'smoothly',
   backgroundColor,
@@ -87,7 +85,7 @@ function FadeScrollLinked({
   };
 
   return (
-    <StoryboardScrollLinked
+    <SlowPlay
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -95,7 +93,7 @@ function FadeScrollLinked({
       transitionExtent={transitionExtent}
     >
       {render}
-    </StoryboardScrollLinked>
+    </SlowPlay>
   );
 }
 export default FadeScrollLinked;

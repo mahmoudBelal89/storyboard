@@ -14,9 +14,7 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
 import { FadeOptions } from '../components/types';
-import StoryboardScrollTriggered, {
-  StoryboardScrollTriggeredDefaultProps,
-} from '../components/StoryboardScrollTriggered';
+import Play, { PlayDefaultProps } from '../components/Play';
 import { offsetAnimation } from './transform';
 
 type Props = {
@@ -30,7 +28,7 @@ type Props = {
 };
 
 function FadeScrollTriggered({
-  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
+  sketchesCount = PlayDefaultProps.scenesCount,
   height,
   fadeConfig = 'smoothly',
   backgroundColor,
@@ -86,14 +84,14 @@ function FadeScrollTriggered({
   };
 
   return (
-    <StoryboardScrollTriggered
+    <Play
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
     >
       {render}
-    </StoryboardScrollTriggered>
+    </Play>
   );
 }
 export default FadeScrollTriggered;

@@ -1,48 +1,55 @@
 'use client';
 
 import React, { ReactNode } from 'react';
-import { motion, MotionValue, useTransform } from 'framer-motion';
-import StoryboardScrollLinked, {
-  StoryboardScrollLinkedDefaultProps,
-} from './StoryboardScrollLinked';
+import {
+  motion,
+  MotionValue,
+  useTransform,
+  SpringOptions,
+} from 'framer-motion';
+import SlowPlay, { SlowPlayDefaultProps } from './SlowPlay';
 
-export const SketchesScrollLinkedDefaultProps = {
+export const ScenesScrollLinkedDefaultProps = {
   isZIndexNegative: false,
   isDisabledWhileTransition: true,
 };
-const Default = SketchesScrollLinkedDefaultProps;
+const Default = ScenesScrollLinkedDefaultProps;
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
   transitionExtent?: number;
+  isSpring?: boolean;
+  springConfig?: SpringOptions;
   isZIndexNegative?: boolean;
   isDisabledWhileTransition?: boolean;
   children: {
-    sketches: ReactNode;
+    scenes: ReactNode;
     render: (
       sketch: ReactNode,
       index: number,
-      scrollProgress: MotionValue<number>,
-      storyboardScrollProgress: MotionValue<number>
+      transitionProgress: MotionValue<number>,
+      scrollProgress: MotionValue<number>
     ) => ReactNode;
   };
 };
 
-function SketchesScrollLinked({
-  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
+function ScenesScrollLinked({
+  scenesCount = SlowPlayDefaultProps.scenesCount,
   height,
   backgroundColor,
   offset,
   transitionExtent,
+  isSpring,
+  springConfig,
   isZIndexNegative = Default.isZIndexNegative,
   isDisabledWhileTransition = Default.isDisabledWhileTransition,
   children,
 }: Props) {
-  const render = (storyboardScrollProgress: MotionValue<number>) => {
+  const render = (scrollProgress: MotionValue<number>) => {
     const coverDisplay = isDisabledWhileTransition
-      ? useTransform(storyboardScrollProgress, (v) =>
+      ? useTransform(scrollProgress, (v) =>
           Number.isInteger(v) ? 'none' : 'block'
         )
       : undefined;
@@ -51,18 +58,18 @@ function SketchesScrollLinked({
       isDisabledWhileTransition && (
         <motion.div
           className='absolute viewport'
-          style={{ display: coverDisplay, zIndex: sketchesCount }}
+          style={{ display: coverDisplay, zIndex: scenesCount }}
         />
       ),
-      React.Children.toArray(children.sketches)
-        .slice(0, sketchesCount)
+      React.Children.toArray(children.scenes)
+        .slice(0, scenesCount)
         .map((v, i) => {
-          const scrollProgress = useTransform(
-            storyboardScrollProgress,
+          const transitionProgress = useTransform(
+            scrollProgress,
             [i - 1, i, i + 1],
             [-1, 0, 1]
           );
-          const display = useTransform(scrollProgress, (v) =>
+          const display = useTransform(transitionProgress, (v) =>
             v === -1 || v === 1 ? 'none' : 'block'
           );
 
@@ -74,7 +81,7 @@ function SketchesScrollLinked({
                 zIndex: isZIndexNegative ? -i : i,
               }}
             >
-              {children.render(v, i, scrollProgress, storyboardScrollProgress)}
+              {children.render(v, i, transitionProgress, scrollProgress)}
             </motion.div>
           );
         }),
@@ -82,15 +89,17 @@ function SketchesScrollLinked({
   };
 
   return (
-    <StoryboardScrollLinked
-      sketchesCount={sketchesCount}
+    <SlowPlay
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
       transitionExtent={transitionExtent}
+      isSpring={isSpring}
+      springConfig={springConfig}
     >
       {render}
-    </StoryboardScrollLinked>
+    </SlowPlay>
   );
 }
-export default SketchesScrollLinked;
+export default ScenesScrollLinked;

@@ -8,10 +8,10 @@ import {
   ValueAnimationTransition,
 } from 'framer-motion';
 import { FadeOptions } from './types';
-import SketchesScrollTriggered from './SketchesScrollTriggered';
+import Act from './Act';
 
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   fadeConfig?: FadeOptions;
   backgroundColor?: string;
@@ -20,43 +20,43 @@ type Props = {
   children: ReactNode;
 };
 
-function FadeScrollTriggered({
-  sketchesCount,
+function Fade({
+  scenesCount,
   height,
   fadeConfig = 'smoothly',
   backgroundColor = 'black',
   offset,
-  transition,
+  transition = { type: 'spring', damping: 25, stiffness: 25, mass: 5 },
   children,
 }: Props) {
   const render = (
-    sketch: ReactNode,
+    scene: ReactNode,
     index: number,
-    motionProgress: MotionValue<number>,
-    storyboardScrollProgress: MotionValue<number>
+    transitionProgress: MotionValue<number>,
+    scrollProgress: MotionValue<number>
   ) => {
     const opacity =
       fadeConfig === 'smoothly'
-        ? useTransform(motionProgress, [-1, 0, 1], [0, 1, 0])
-        : useTransform(motionProgress, [-0.45, 0, 0.45], [0, 1, 0]);
+        ? useTransform(transitionProgress, [-1, 0, 1], [0, 1, 0])
+        : useTransform(transitionProgress, [-0.45, 0, 0.45], [0, 1, 0]);
 
     return (
       <motion.div className='absolute viewport' style={{ opacity: opacity }}>
-        {sketch}
+        {scene}
       </motion.div>
     );
   };
 
   return (
-    <SketchesScrollTriggered
-      sketchesCount={sketchesCount}
+    <Act
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
       transition={transition}
     >
-      {{ sketches: children, render: render }}
-    </SketchesScrollTriggered>
+      {{ scenes: children, render: render }}
+    </Act>
   );
 }
-export default FadeScrollTriggered;
+export default Fade;

@@ -9,17 +9,19 @@ import {
   SpringOptions,
 } from 'framer-motion';
 
-export const StoryboardScrollLinkedDefaultProps = {
-  sketchesCount: 2,
-  height: (sketchesCount: number) => sketchesCount * 200 + 200 + 'vh',
-  offset: (sketchesCount: number) =>
-    sketchesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
-  transitionExtent: 1,
-  isSpring: false,
+export const SlowPlayDefaultProps = {
+  scenesCount: 2,
+  height: (scenesCount: number) => scenesCount * 300 + 'vh',
+  offset: (scenesCount: number) =>
+    scenesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
+  transitionExtent: 1.2,
+  isSpring: true,
+  springConfig: (isSpring: boolean) =>
+    isSpring ? { damping: 20, stiffness: 60, mass: 1.5 } : undefined,
 };
-const Default = StoryboardScrollLinkedDefaultProps;
+const Default = SlowPlayDefaultProps;
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
@@ -29,14 +31,14 @@ type Props = {
   children: (scrollProgress: MotionValue<number>) => ReactNode;
 };
 
-function StoryboardScrollLinked({
-  sketchesCount = Default.sketchesCount,
-  height = Default.height(sketchesCount),
+function SlowPlay({
+  scenesCount = Default.scenesCount,
+  height = Default.height(scenesCount),
   backgroundColor,
-  offset = Default.offset(sketchesCount),
+  offset = Default.offset(scenesCount),
   transitionExtent = Default.transitionExtent,
   isSpring = Default.isSpring,
-  springConfig,
+  springConfig = Default.springConfig(isSpring),
   children,
 }: Props) {
   const root = useRef(null);
@@ -44,11 +46,11 @@ function StoryboardScrollLinked({
     target: root,
     offset: offset,
   });
-  if (sketchesCount > 2) {
-    const totalExtent = sketchesCount + transitionExtent * (sketchesCount - 1);
+  if (scenesCount > 2) {
+    const totalExtent = scenesCount + transitionExtent * (scenesCount - 1);
     const inputRange: number[] = [];
     const outputRange: number[] = [];
-    for (let i = 0; i < sketchesCount; i++) {
+    for (let i = 0; i < scenesCount; i++) {
       inputRange.push(
         (i * (1 + transitionExtent)) / totalExtent,
         (1 + i * (1 + transitionExtent)) / totalExtent
@@ -75,4 +77,4 @@ function StoryboardScrollLinked({
     </div>
   );
 }
-export default StoryboardScrollLinked;
+export default SlowPlay;

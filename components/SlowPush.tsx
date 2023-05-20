@@ -9,13 +9,12 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from './constants';
 import { Direction } from './types';
-import StoryboardScrollLinked, {
-  StoryboardScrollLinkedDefaultProps,
-} from './StoryboardScrollLinked';
+import { xy } from './helper';
+import SlowPlay, { SlowPlayDefaultProps } from './SlowPlay';
 
 type Props = {
   direction?: Direction;
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
@@ -25,9 +24,9 @@ type Props = {
   children: ReactNode;
 };
 
-function PushScrollLinked({
+function SlowPush({
   direction = 'left',
-  sketchesCount = StoryboardScrollLinkedDefaultProps.sketchesCount,
+  scenesCount = SlowPlayDefaultProps.scenesCount,
   height,
   backgroundColor,
   offset,
@@ -37,26 +36,23 @@ function PushScrollLinked({
   children,
 }: Props) {
   const render = (scrollProgress: MotionValue<number>) => {
-    const push = useTransform(scrollProgress, (v) => {
-      return direction === 'left'
-        ? -v * 100 + 'vw'
-        : direction === 'up'
-        ? -v * 100 + 'vh'
-        : direction === 'right'
-        ? v * 100 - 100 * (sketchesCount! - 1) + 'vw'
-        : v * 100 - 100 * (sketchesCount! - 1) + 'vh'; // direction === 'down'
+    const position = useTransform(scrollProgress, (v) => {
+      return direction === 'left' || direction === 'up'
+        ? -v * 100
+        : v * 100 - 100 * (scenesCount! - 1);
     });
+    const [x, y] = xy(direction, position);
 
     return (
       <motion.div
         className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} fit`}
         style={{
-          x: direction === 'left' || direction === 'right' ? push : undefined,
-          y: direction === 'up' || direction === 'down' ? push : undefined,
+          x: x,
+          y: y,
         }}
       >
         {React.Children.toArray(children)
-          .slice(0, sketchesCount)
+          .slice(0, scenesCount)
           .map((v) => (
             <div className='relative viewport'>{v}</div>
           ))}
@@ -65,8 +61,8 @@ function PushScrollLinked({
   };
 
   return (
-    <StoryboardScrollLinked
-      sketchesCount={sketchesCount}
+    <SlowPlay
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
@@ -75,7 +71,7 @@ function PushScrollLinked({
       springConfig={springConfig}
     >
       {render}
-    </StoryboardScrollLinked>
+    </SlowPlay>
   );
 }
-export default PushScrollLinked;
+export default SlowPush;

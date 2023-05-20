@@ -10,17 +10,15 @@ import {
   animate,
   ValueAnimationTransition,
 } from 'framer-motion';
-import StoryboardScrollTriggered, {
-  StoryboardScrollTriggeredDefaultProps,
-} from './StoryboardScrollTriggered';
+import Play, { PlayDefaultProps } from './Play';
 
-export const SketchesScrollTriggeredDefaultProps = {
+export const ActDefaultProps = {
   isZIndexNegative: false,
   isDisabledWhileTransition: true,
 };
-const Default = SketchesScrollTriggeredDefaultProps;
+const Default = ActDefaultProps;
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
@@ -28,45 +26,45 @@ type Props = {
   isZIndexNegative?: boolean;
   isDisabledWhileTransition?: boolean;
   children: {
-    sketches: ReactNode;
+    scenes: ReactNode;
     render: (
       sketch: ReactNode,
       index: number,
-      motionProgress: MotionValue<number>,
-      storyboardScrollProgress: MotionValue<number>
+      transitionProgress: MotionValue<number>,
+      scrollProgress: MotionValue<number>
     ) => ReactNode;
   };
 };
 
-function SketchesScrollTriggered({
-  sketchesCount = StoryboardScrollTriggeredDefaultProps.sketchesCount,
+function Act({
+  scenesCount = PlayDefaultProps.scenesCount,
   height,
   backgroundColor,
   offset,
-  transition,
+  transition = PlayDefaultProps.transition,
   isZIndexNegative = Default.isZIndexNegative,
   isDisabledWhileTransition = Default.isDisabledWhileTransition,
   children,
 }: Props) {
-  const render = (storyboardScrollProgress: MotionValue<number>) => {
-    return React.Children.toArray(children.sketches)
-      .slice(0, sketchesCount)
+  const render = (scrollProgress: MotionValue<number>) => {
+    return React.Children.toArray(children.scenes)
+      .slice(0, scenesCount)
       .map((v, i) => {
-        const motionProgress = motionValue(i === 0 ? 0 : -1);
-        useMotionValueEvent(storyboardScrollProgress, 'change', (v) => {
+        const transitionProgress = motionValue(i === 0 ? 0 : -1);
+        useMotionValueEvent(scrollProgress, 'change', (v) => {
           if (v === i) {
-            animate(motionProgress, 0, transition);
+            animate(transitionProgress, 0, transition);
           } else if (v > i) {
-            animate(motionProgress, 1, transition);
+            animate(transitionProgress, 1, transition);
           } else {
-            animate(motionProgress, -1, transition);
+            animate(transitionProgress, -1, transition);
           }
         });
-        const display = useTransform(motionProgress, (v) =>
+        const display = useTransform(transitionProgress, (v) =>
           v === -1 || v === 1 ? 'none' : 'block'
         );
         const coverDisplay = isDisabledWhileTransition
-          ? useTransform(motionProgress, (v) =>
+          ? useTransform(transitionProgress, (v) =>
               v === -1 || v === 0 || v === 1 ? 'none' : 'block'
             )
           : undefined;
@@ -75,7 +73,7 @@ function SketchesScrollTriggered({
           isDisabledWhileTransition && (
             <motion.div
               className='absolute viewport'
-              style={{ display: coverDisplay, zIndex: sketchesCount }}
+              style={{ display: coverDisplay, zIndex: scenesCount }}
             />
           ),
           <motion.div
@@ -85,21 +83,21 @@ function SketchesScrollTriggered({
               zIndex: isZIndexNegative ? -i : i,
             }}
           >
-            {children.render(v, i, motionProgress, storyboardScrollProgress)}
+            {children.render(v, i, transitionProgress, scrollProgress)}
           </motion.div>,
         ];
       });
   };
 
   return (
-    <StoryboardScrollTriggered
-      sketchesCount={sketchesCount}
+    <Play
+      scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
     >
       {render}
-    </StoryboardScrollTriggered>
+    </Play>
   );
 }
-export default SketchesScrollTriggered;
+export default Act;

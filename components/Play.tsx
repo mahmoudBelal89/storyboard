@@ -3,23 +3,25 @@
 import { ReactNode, useRef } from 'react';
 import { MotionValue, useScroll, useTransform } from 'framer-motion';
 
-export const StoryboardScrollTriggeredDefaultProps = {
-  sketchesCount: 2,
-  height: (sketchesCount: number) => sketchesCount * 100 + 200 + 'vh',
+const SPRING: 'spring' = 'spring';
+export const PlayDefaultProps = {
+  scenesCount: 2,
+  height: (scenesCount: number) => scenesCount * 150 + 'vh',
   offset: ['0 0', '1 1'],
+  transition: { type: SPRING, damping: 20, stiffness: 75, mass: 1.5 },
 };
-const Default = StoryboardScrollTriggeredDefaultProps;
+const Default = PlayDefaultProps;
 type Props = {
-  sketchesCount?: number;
+  scenesCount?: number;
   height?: string;
   backgroundColor?: string;
   offset?: any;
   children: (scrollProgress: MotionValue<number>) => ReactNode;
 };
 
-function StoryboardScrollTriggered({
-  sketchesCount = Default.sketchesCount,
-  height = Default.height(sketchesCount),
+function Play({
+  scenesCount = Default.scenesCount,
+  height = Default.height(scenesCount),
   backgroundColor,
   offset = Default.offset,
   children,
@@ -30,13 +32,13 @@ function StoryboardScrollTriggered({
     offset: offset,
   });
   scrollYProgress = useTransform(scrollYProgress, (v) => {
-    for (let i = 0; i < sketchesCount; i++) {
-      if (v >= i / sketchesCount && v < (i + 1) / sketchesCount) {
+    for (let i = 0; i < scenesCount; i++) {
+      if (v >= i / scenesCount && v < (i + 1) / scenesCount) {
         return i;
       }
     }
     if (v >= 1) {
-      return sketchesCount - 1;
+      return scenesCount - 1;
     } else {
       return 0;
     }
@@ -56,4 +58,4 @@ function StoryboardScrollTriggered({
     </div>
   );
 }
-export default StoryboardScrollTriggered;
+export default Play;
