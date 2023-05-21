@@ -9,9 +9,9 @@ import {
   animate,
   ValueAnimationTransition,
 } from 'framer-motion';
-import { _FLEX_DIRECTION_VARIANTS } from './constants';
-import { Direction } from './types';
-import { xy } from './helper';
+import { _FLEX_DIRECTION_VARIANTS } from '../constants';
+import { Direction } from '../types';
+import { xy } from '../helper';
 import Play, { PlayDefaultProps } from './Play';
 
 type Props = {
@@ -34,15 +34,15 @@ function Push({
   children,
 }: Props) {
   const render = (scrollProgress: MotionValue<number>) => {
-    const dirOffset = -100 * (scenesCount - 1);
+    const initialReversePosition = (scenesCount - 1) * -100;
     const position = motionValue(
-      direction === 'right' || direction === 'down' ? dirOffset : 0
+      direction === 'right' || direction === 'down' ? initialReversePosition : 0
     );
     useMotionValueEvent(scrollProgress, 'change', (v) => {
       if (direction === 'left' || direction === 'up') {
         animate(position, -v * 100, transition);
       } else {
-        animate(position, v * 100 + dirOffset, transition);
+        animate(position, initialReversePosition + v * 100, transition);
       }
     });
     const [x, y] = xy(direction, position);

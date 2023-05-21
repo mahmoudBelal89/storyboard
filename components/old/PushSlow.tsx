@@ -7,10 +7,10 @@ import {
   useTransform,
   SpringOptions,
 } from 'framer-motion';
-import { _FLEX_DIRECTION_VARIANTS } from './constants';
-import { Direction } from './types';
-import { xy } from './helper';
-import SlowPlay, { SlowPlayDefaultProps } from './SlowPlay';
+import { _FLEX_DIRECTION_VARIANTS } from '../constants';
+import { Direction } from '../types';
+import { xy } from '../helper';
+import PlaySlow, { PlaySlowDefaultProps } from './PlaySlow';
 
 type Props = {
   direction?: Direction;
@@ -24,9 +24,9 @@ type Props = {
   children: ReactNode;
 };
 
-function SlowPush({
+function PushSlow({
   direction = 'left',
-  scenesCount = SlowPlayDefaultProps.scenesCount,
+  scenesCount = PlaySlowDefaultProps.scenesCount,
   height,
   backgroundColor,
   offset,
@@ -61,7 +61,7 @@ function SlowPush({
   };
 
   return (
-    <SlowPlay
+    <PlaySlow
       scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -71,7 +71,7 @@ function SlowPush({
       springConfig={springConfig}
     >
       {render}
-    </SlowPlay>
+    </PlaySlow>
   );
 }
-export default SlowPush;
+export default PushSlow;

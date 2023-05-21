@@ -7,8 +7,8 @@ import {
   useTransform,
   ValueAnimationTransition,
 } from 'framer-motion';
-import { Direction } from './types';
-import { xy } from './helper';
+import { Direction } from '../types';
+import { xy } from '../helper';
 import Act from './Act';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
   children: ReactNode;
 };
 
-function Cover({
+function Uncover({
   direction = 'left',
   scenesCount,
   height,
@@ -38,8 +38,8 @@ function Cover({
   ) => {
     const position =
       direction === 'left' || direction === 'up'
-        ? useTransform(transitionProgress, [-1, 0], [100, 0])
-        : useTransform(transitionProgress, [-1, 0], [-100, 0]);
+        ? useTransform(transitionProgress, [0, 1], [0, -100])
+        : useTransform(transitionProgress, [0, 1], [0, 100]);
     const [x, y] = xy(direction, position);
 
     return (
@@ -62,9 +62,10 @@ function Cover({
       backgroundColor={backgroundColor}
       offset={offset}
       transition={transition}
+      isZIndexNegative={true}
     >
       {{ scenes: children, render: render }}
     </Act>
   );
 }
-export default Cover;
+export default Uncover;

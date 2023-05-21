@@ -7,13 +7,13 @@ import {
   useTransform,
   SpringOptions,
 } from 'framer-motion';
-import SlowPlay, { SlowPlayDefaultProps } from './SlowPlay';
+import PlaySlow, { PlaySlowDefaultProps } from './PlaySlow';
 
-export const ScenesScrollLinkedDefaultProps = {
+export const ActSlowDefaultProps = {
   isZIndexNegative: false,
   isDisabledWhileTransition: true,
 };
-const Default = ScenesScrollLinkedDefaultProps;
+const Default = ActSlowDefaultProps;
 type Props = {
   scenesCount?: number;
   height?: string;
@@ -35,8 +35,8 @@ type Props = {
   };
 };
 
-function ScenesScrollLinked({
-  scenesCount = SlowPlayDefaultProps.scenesCount,
+function ActSlow({
+  scenesCount = PlaySlowDefaultProps.scenesCount,
   height,
   backgroundColor,
   offset,
@@ -89,7 +89,7 @@ function ScenesScrollLinked({
   };
 
   return (
-    <SlowPlay
+    <PlaySlow
       scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -99,7 +99,7 @@ function ScenesScrollLinked({
       springConfig={springConfig}
     >
       {render}
-    </SlowPlay>
+    </PlaySlow>
   );
 }
-export default ScenesScrollLinked;
+export default ActSlow;

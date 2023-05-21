@@ -1,37 +1,27 @@
 'use client';
 
 import { ReactNode } from 'react';
-import {
-  motion,
-  MotionValue,
-  useTransform,
-  SpringOptions,
-} from 'framer-motion';
-import { Direction } from './types';
-import { xy } from './helper';
-import SlowAct from './SlowAct';
+import { motion, MotionValue, useTransform } from 'framer-motion';
+import { FadeOptions } from '../types';
+import ActSlow from './ActSlow';
 
 type Props = {
-  direction?: Direction;
   scenesCount?: number;
   height?: string;
+  fadeConfig?: FadeOptions;
   backgroundColor?: string;
   offset?: any;
   transitionExtent?: number;
-  isSpring?: boolean;
-  springConfig?: SpringOptions;
   children: ReactNode;
 };
 
-function SlowCover({
-  direction = 'left',
+function FadeSlow({
   scenesCount,
   height,
-  backgroundColor,
+  fadeConfig = 'smoothly',
+  backgroundColor = 'black',
   offset,
   transitionExtent,
-  isSpring,
-  springConfig,
   children,
 }: Props) {
   const render = (
@@ -40,18 +30,16 @@ function SlowCover({
     transitionProgress: MotionValue<number>,
     scrollProgress: MotionValue<number>
   ) => {
-    const position =
-      direction === 'left' || direction === 'up'
-        ? useTransform(transitionProgress, [-1, 0], [100, 0])
-        : useTransform(transitionProgress, [-1, 0], [-100, 0]);
-    const [x, y] = xy(direction, position);
+    const opacity =
+      fadeConfig === 'smoothly'
+        ? useTransform(transitionProgress, [-1, 0, 1], [0, 1, 0])
+        : useTransform(transitionProgress, [-0.45, 0, 0.45], [0, 1, 0]);
 
     return (
       <motion.div
         className='absolute viewport'
         style={{
-          x: x,
-          y: y,
+          opacity: opacity,
         }}
       >
         {scene}
@@ -60,17 +48,16 @@ function SlowCover({
   };
 
   return (
-    <SlowAct
+    <ActSlow
       scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
       transitionExtent={transitionExtent}
-      isSpring={isSpring}
-      springConfig={springConfig}
+      isSpring={false}
     >
       {{ scenes: children, render: render }}
-    </SlowAct>
+    </ActSlow>
   );
 }
-export default SlowCover;
+export default FadeSlow;

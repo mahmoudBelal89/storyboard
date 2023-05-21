@@ -9,7 +9,7 @@ import {
   SpringOptions,
 } from 'framer-motion';
 
-export const SlowPlayDefaultProps = {
+export const PlaySlowDefaultProps = {
   scenesCount: 2,
   height: (scenesCount: number) => scenesCount * 300 + 'vh',
   offset: (scenesCount: number) =>
@@ -19,7 +19,7 @@ export const SlowPlayDefaultProps = {
   springConfig: (isSpring: boolean) =>
     isSpring ? { damping: 20, stiffness: 60, mass: 1.5 } : undefined,
 };
-const Default = SlowPlayDefaultProps;
+const Default = PlaySlowDefaultProps;
 type Props = {
   scenesCount?: number;
   height?: string;
@@ -31,7 +31,7 @@ type Props = {
   children: (scrollProgress: MotionValue<number>) => ReactNode;
 };
 
-function SlowPlay({
+function PlaySlow({
   scenesCount = Default.scenesCount,
   height = Default.height(scenesCount),
   backgroundColor,
@@ -77,4 +77,4 @@ function SlowPlay({
     </div>
   );
 }
-export default SlowPlay;
+export default PlaySlow;

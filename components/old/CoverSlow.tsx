@@ -5,11 +5,11 @@ import {
   motion,
   MotionValue,
   useTransform,
-  ValueAnimationTransition,
+  SpringOptions,
 } from 'framer-motion';
-import { Direction } from './types';
-import { xy } from './helper';
-import Act from './Act';
+import { Direction } from '../types';
+import { xy } from '../helper';
+import ActSlow from './ActSlow';
 
 type Props = {
   direction?: Direction;
@@ -17,17 +17,21 @@ type Props = {
   height?: string;
   backgroundColor?: string;
   offset?: any;
-  transition?: ValueAnimationTransition<number>;
+  transitionExtent?: number;
+  isSpring?: boolean;
+  springConfig?: SpringOptions;
   children: ReactNode;
 };
 
-function Uncover({
+function CoverSlow({
   direction = 'left',
   scenesCount,
   height,
   backgroundColor,
   offset,
-  transition,
+  transitionExtent,
+  isSpring,
+  springConfig,
   children,
 }: Props) {
   const render = (
@@ -38,8 +42,8 @@ function Uncover({
   ) => {
     const position =
       direction === 'left' || direction === 'up'
-        ? useTransform(transitionProgress, [0, 1], [0, -100])
-        : useTransform(transitionProgress, [0, 1], [0, 100]);
+        ? useTransform(transitionProgress, [-1, 0], [100, 0])
+        : useTransform(transitionProgress, [-1, 0], [-100, 0]);
     const [x, y] = xy(direction, position);
 
     return (
@@ -56,16 +60,17 @@ function Uncover({
   };
 
   return (
-    <Act
+    <ActSlow
       scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
-      transition={transition}
-      isZIndexNegative={true}
+      transitionExtent={transitionExtent}
+      isSpring={isSpring}
+      springConfig={springConfig}
     >
       {{ scenes: children, render: render }}
-    </Act>
+    </ActSlow>
   );
 }
-export default Uncover;
+export default CoverSlow;

@@ -5,11 +5,11 @@ import {
   motion,
   MotionValue,
   useTransform,
-  SpringOptions,
+  ValueAnimationTransition,
 } from 'framer-motion';
-import { Direction } from './types';
-import { xy } from './helper';
-import SlowAct from './SlowAct';
+import { Direction } from '../types';
+import { xy } from '../helper';
+import Act from './Act';
 
 type Props = {
   direction?: Direction;
@@ -17,21 +17,17 @@ type Props = {
   height?: string;
   backgroundColor?: string;
   offset?: any;
-  transitionExtent?: number;
-  isSpring?: boolean;
-  springConfig?: SpringOptions;
+  transition?: ValueAnimationTransition<number>;
   children: ReactNode;
 };
 
-function SlowUncover({
+function Cover({
   direction = 'left',
   scenesCount,
   height,
   backgroundColor,
   offset,
-  transitionExtent,
-  isSpring,
-  springConfig,
+  transition,
   children,
 }: Props) {
   const render = (
@@ -42,8 +38,8 @@ function SlowUncover({
   ) => {
     const position =
       direction === 'left' || direction === 'up'
-        ? useTransform(transitionProgress, [0, 1], [0, -100])
-        : useTransform(transitionProgress, [0, 1], [0, 100]);
+        ? useTransform(transitionProgress, [-1, 0], [100, 0])
+        : useTransform(transitionProgress, [-1, 0], [-100, 0]);
     const [x, y] = xy(direction, position);
 
     return (
@@ -60,18 +56,15 @@ function SlowUncover({
   };
 
   return (
-    <SlowAct
+    <Act
       scenesCount={scenesCount}
       height={height}
       backgroundColor={backgroundColor}
       offset={offset}
-      transitionExtent={transitionExtent}
-      isSpring={isSpring}
-      springConfig={springConfig}
-      isZIndexNegative={true}
+      transition={transition}
     >
       {{ scenes: children, render: render }}
-    </SlowAct>
+    </Act>
   );
 }
-export default SlowUncover;
+export default Cover;

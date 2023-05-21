@@ -7,7 +7,7 @@ import {
   useTransform,
   ValueAnimationTransition,
 } from 'framer-motion';
-import { FadeOptions } from './types';
+import { FadeOptions } from '../types';
 import Act from './Act';
 
 type Props = {

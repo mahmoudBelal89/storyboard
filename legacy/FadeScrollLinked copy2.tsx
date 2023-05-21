@@ -3,7 +3,7 @@
 import React, { ReactNode, useRef } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
-import SlowPlay from '../components/SlowPlay';
+import PlaySlow from '../components/PlaySlow';
 import { getScrollDirectionOfStickyScrollLinked } from './transform';
 
 type Props = {
@@ -86,7 +86,7 @@ function FadeScrollLinked({
   };
 
   return (
-    <SlowPlay
+    <PlaySlow
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -94,7 +94,7 @@ function FadeScrollLinked({
       transitionExtent={transitionExtent}
     >
       {render}
-    </SlowPlay>
+    </PlaySlow>
   );
 }
 export default FadeScrollLinked;
