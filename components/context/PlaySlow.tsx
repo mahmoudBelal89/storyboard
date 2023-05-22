@@ -38,12 +38,12 @@ type Props = {
 
 function PlaySlow({
   scenesCount = 2,
-  height = scenesCount * 300 + 'vh',
+  height = scenesCount * 350 + 'vh',
   backgroundColor,
   offset = scenesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
   transitionExtent = 1.2,
-  isSpring = false,
-  springConfig,
+  isSpring = true,
+  springConfig = isSpring ? { damping: 19 } : undefined,
   children,
 }: Props) {
   const root = useRef(null);

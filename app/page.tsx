@@ -10,46 +10,57 @@ import SpaceImage from '../resources/images/space.png';
 import TreesImage from '../resources/images/trees.jpg';
 import UmbrellaImage from '../resources/images/umbrella.jpg';
 
-import PushSlow from '@/components/old/PushSlow';
 import Parallax from '@/components/parallax/Parallax';
 import Father from '@/components/parallax/Father';
 import Son from '@/components/parallax/Son';
 import { Children } from 'react';
 import PlaySlow from '@/components/context/PlaySlow';
-import PushSlowContext from '@/components/context/PushSlowContext';
+import PushSlow from '@/components/context/PushSlow';
+import CoverSlow from '@/components/context/CoverSlow';
+import ActSlow from '@/components/context/ActSlow';
 
 export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <PlaySlow scenesCount={5}>
-        <PushSlowContext>
-          <Image
-            src={FighterImage}
-            alt='fighter'
-            className='viewport object-cover'
-          />
-          <Image
-            src={HouseImage}
-            alt='house'
-            className='viewport object-cover'
-          />
-          <Image
-            src={SpaceImage}
-            alt='space'
-            className='viewport object-cover'
-          />
-          <Image
-            src={TreesImage}
-            alt='trees'
-            className='viewport object-cover'
-          />
-          <Image
-            src={UmbrellaImage}
-            alt='umbrella'
-            className='viewport object-cover'
-          />
-        </PushSlowContext>
+        <ActSlow>
+          <CoverSlow>
+            <Image
+              src={FighterImage}
+              alt='fighter'
+              className='viewport object-cover opacity-50'
+            />
+          </CoverSlow>
+          <CoverSlow>
+            <Image
+              src={HouseImage}
+              alt='house'
+              className='viewport object-cover opacity-50'
+            />
+          </CoverSlow>
+          <CoverSlow>
+            <Image
+              src={SpaceImage}
+              alt='space'
+              className='viewport object-cover opacity-50'
+            />
+          </CoverSlow>
+          <CoverSlow>
+            <Image
+              src={TreesImage}
+              alt='trees'
+              className='viewport object-cover opacity-50'
+            />
+          </CoverSlow>
+          <CoverSlow>
+            <Image
+              src={UmbrellaImage}
+              alt='umbrella'
+              className='viewport object-cover opacity-50'
+            />
+          </CoverSlow>
+        </ActSlow>
       </PlaySlow>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Father
@@ -105,7 +116,7 @@ export default function Home() {
         ]}
       </Parallax>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <PushSlow scenesCount={5} direction='right'>
+      {/*       <PushSlow direction='right'>
         <Image
           src={FighterImage}
           alt='fighter'
@@ -120,7 +131,7 @@ export default function Home() {
           className='viewport object-cover'
         />
 
-        {/*  <div className=' viewport'>
+        <div className=' viewport'>
           <div className='m-4 bg-red-900 border rounded-2xl w-96 h-96'>
             <button
               className='m-4 w-52 border rounded-2xl bg-slate-400'
@@ -163,8 +174,8 @@ export default function Home() {
           >
             the fifth guy
           </button>
-        </div> */}
-      </PushSlow>
+        </div>
+      </PushSlow> */}
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Push backgroundColor='white' scenesCount={5}>
         <Image
