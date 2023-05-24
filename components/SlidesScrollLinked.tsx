@@ -1,0 +1,105 @@
+'use client';
+
+import { ReactNode, useRef, createContext } from 'react';
+import {
+  MotionValue,
+  useScroll,
+  useTransform,
+  useSpring,
+  SpringOptions,
+} from 'framer-motion';
+
+export type SlidesScrollLinkedContextProps = {
+  slidesCount: number;
+  height: string;
+  backgroundColor?: string;
+  offset: any;
+  transitionExtent: number;
+  isSpring: boolean;
+  springConfig?: SpringOptions;
+};
+export type SlidesScrollLinkedContextType = {
+  scrollProgress: MotionValue<number>;
+  slidesProgress: MotionValue<number>;
+  props: SlidesScrollLinkedContextProps;
+};
+export const SlidesScrollLinkedContext =
+  createContext<SlidesScrollLinkedContextType>(null!);
+
+type Props = {
+  slidesCount?: number;
+  height?: string;
+  backgroundColor?: string;
+  offset?: any;
+  transitionExtent?: number;
+  isSpring?: boolean;
+  springConfig?: SpringOptions;
+  children: ReactNode;
+};
+
+function SlidesScrollLinked({
+  slidesCount = 2,
+  height = slidesCount * 350 + 'vh',
+  backgroundColor,
+  offset = slidesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
+  transitionExtent = 1.2,
+  isSpring = true,
+  springConfig = isSpring ? { damping: 19 } : undefined,
+  children,
+}: Props) {
+  const root = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: root,
+    offset: offset,
+  });
+  let slidesProgress = scrollYProgress;
+  if (slidesCount > 2) {
+    const totalExtent = slidesCount + transitionExtent * (slidesCount - 1);
+    const inputRange: number[] = [];
+    const outputRange: number[] = [];
+    for (let i = 0; i < slidesCount; i++) {
+      inputRange.push(
+        (i * (1 + transitionExtent)) / totalExtent,
+        (1 + i * (1 + transitionExtent)) / totalExtent
+      );
+      outputRange.push(i, i);
+    }
+    slidesProgress = useTransform(slidesProgress, inputRange, outputRange);
+  }
+  if (isSpring) {
+    slidesProgress = useSpring(slidesProgress, springConfig);
+  }
+
+  return (
+    <div
+      ref={root}
+      className='viewport-width'
+      style={{
+        minHeight: height,
+        maxHeight: height,
+        backgroundColor: backgroundColor,
+      }}
+    >
+      <div className='sticky-viewport'>
+        <SlidesScrollLinkedContext.Provider
+          value={{
+            scrollProgress: scrollYProgress,
+            slidesProgress: slidesProgress,
+            props: {
+              slidesCount: slidesCount,
+              height: height,
+              backgroundColor: backgroundColor,
+              offset: offset,
+              transitionExtent: transitionExtent,
+              isSpring: isSpring,
+              springConfig: springConfig,
+            },
+          }}
+        >
+          {children}
+        </SlidesScrollLinkedContext.Provider>
+      </div>
+    </div>
+  );
+}
+export default SlidesScrollLinked;

@@ -2,18 +2,19 @@
 
 import React, { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
-import { PlaySlowContext } from './PlaySlow';
+import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
 
-export type ActSlowContextProps = {
+export type SoloSlidesScrollLinkedContextProps = {
   isZIndexNegative: boolean;
   isDisabledWhileTransition: boolean;
 };
-export type ActSlowContextType = {
-  sceneIndex: number;
+export type SoloSlidesScrollLinkedContextType = {
+  slideIndex: number;
   transitionProgress: MotionValue<number>;
-  props: ActSlowContextProps;
+  props: SoloSlidesScrollLinkedContextProps;
 };
-export const ActSlowContext = createContext<ActSlowContextType>(null!);
+export const SoloSlidesScrollLinkedContext =
+  createContext<SoloSlidesScrollLinkedContextType>(null!);
 
 type Props = {
   isZIndexNegative?: boolean;
@@ -21,19 +22,14 @@ type Props = {
   children: ReactNode;
 };
 
-function ActSlow({
+function SoloSlidesScrollLinked({
   isZIndexNegative = false,
   isDisabledWhileTransition = true,
   children,
 }: Props) {
-  const context = useContext(PlaySlowContext);
-  const scenesCount = context.props.scenesCount;
-  const scenesProgress = context.scenesProgress;
-  const coverDisplay = isDisabledWhileTransition
-    ? useTransform(scenesProgress, (v) =>
-        Number.isInteger(v) ? 'none' : 'block'
-      )
-    : undefined;
+  const slidesContext = useContext(SlidesScrollLinkedContext);
+  const slidesCount = slidesContext.props.slidesCount;
+  const slidesProgress = slidesContext.slidesProgress;
 
   return (
     <div className='absolute viewport'>
@@ -41,32 +37,38 @@ function ActSlow({
         isDisabledWhileTransition && (
           <motion.div
             className='absolute viewport'
-            style={{ display: coverDisplay, zIndex: scenesCount }}
+            style={{
+              display: isDisabledWhileTransition
+                ? useTransform(slidesProgress, (v) =>
+                    Number.isInteger(v) ? 'none' : 'block'
+                  )
+                : undefined,
+              zIndex: slidesCount,
+            }}
           />
         ),
         React.Children.toArray(children)
-          .slice(0, scenesCount)
+          .slice(0, slidesCount)
           .map((v, i) => {
             const transitionProgress = useTransform(
-              scenesProgress,
+              slidesProgress,
               [i - 1, i, i + 1],
               [-1, 0, 1]
-            );
-            const display = useTransform(transitionProgress, (v) =>
-              v === -1 || v === 1 ? 'none' : 'block'
             );
 
             return (
               <motion.div
                 className='absolute viewport'
                 style={{
-                  display: display,
+                  display: useTransform(transitionProgress, (v) =>
+                    v === -1 || v === 1 ? 'none' : 'block'
+                  ),
                   zIndex: isZIndexNegative ? -i : i,
                 }}
               >
-                <ActSlowContext.Provider
+                <SoloSlidesScrollLinkedContext.Provider
                   value={{
-                    sceneIndex: i,
+                    slideIndex: i,
                     transitionProgress: transitionProgress,
                     props: {
                       isZIndexNegative: isZIndexNegative,
@@ -75,7 +77,7 @@ function ActSlow({
                   }}
                 >
                   {v}
-                </ActSlowContext.Provider>
+                </SoloSlidesScrollLinkedContext.Provider>
               </motion.div>
             );
           }),
@@ -83,4 +85,4 @@ function ActSlow({
     </div>
   );
 }
-export default ActSlow;
+export default SoloSlidesScrollLinked;
