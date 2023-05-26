@@ -5,58 +5,55 @@ import { xy } from './helper';
 import { DirectionContext } from './DirectionProvider';
 import { FadeConfigContext } from './FadeConfigProvider';
 
-export function moveIn(
+export function translateIn(
   direction?: Direction
 ): (transitionProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
     }
-    const [x, y] = xy(
+    return xy(
       direction,
       direction === 'left' || direction === 'up'
         ? useTransform(transitionProgress, [-1, 0], [100, 0])
         : useTransform(transitionProgress, [-1, 0], [-100, 0])
     );
-    return { x: x, y: y };
   };
 }
 
-export function moveOut(
+export function translateOut(
   direction?: Direction
 ): (transitionProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
     }
-    const [x, y] = xy(
+    return xy(
       direction,
       direction === 'left' || direction === 'up'
         ? useTransform(transitionProgress, [0, 1], [0, -100])
         : useTransform(transitionProgress, [0, 1], [0, 100])
     );
-    return { x: x, y: y };
   };
 }
 
-export function moveInOut(
+export function translateInOut(
   direction?: Direction
 ): (transitionProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
     }
-    const [x, y] = xy(
+    return xy(
       direction,
       direction === 'left' || direction === 'up'
         ? useTransform(transitionProgress, [-1, 0, 1], [100, 0, -100])
         : useTransform(transitionProgress, [-1, 0, 1], [-100, 0, 100])
     );
-    return { x: x, y: y };
   };
 }
 
-export function fadeInOut(
+export function opacityInOut(
   fadeConfig?: FadeOptions
 ): (transitionProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {

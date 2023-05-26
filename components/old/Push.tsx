@@ -45,12 +45,11 @@ function Push({
         animate(position, initialReversePosition + v * 100, transition);
       }
     });
-    const [x, y] = xy(direction, position);
 
     return (
       <motion.div
         className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} fit`}
-        style={{ x: x, y: y }}
+        style={{ ...xy(direction, position) }}
       >
         {React.Children.toArray(children)
           .slice(0, scenesCount)

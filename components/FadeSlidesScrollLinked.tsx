@@ -1,31 +1,31 @@
 'use client';
 
 import React, { ReactNode, useContext } from 'react';
-import { Direction } from './types';
-import DirectionProvider from './DirectionProvider';
+import { FadeOptions } from './types';
 import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
 import SoloSlidesScrollLinked from './SoloSlidesScrollLinked';
 import SlideScrollLinked from './SlideScrollLinked';
-import { translateIn } from './slide-transition';
+import { opacityInOut } from './slide-transition';
+import FadeConfigProvider from './FadeConfigProvider';
 
 type Props = {
-  direction?: Direction;
+  fadeConfig?: FadeOptions;
   children: ReactNode;
 };
 
-function CoverSlidesScrollLinked({ direction = 'left', children }: Props) {
+function FadeSlidesScrollLinked({ fadeConfig = 'smoothly', children }: Props) {
   return (
-    <DirectionProvider direction={direction}>
+    <FadeConfigProvider fadeConfig={fadeConfig}>
       <SoloSlidesScrollLinked>
         {React.Children.toArray(children)
           .slice(0, useContext(SlidesScrollLinkedContext).props.slidesCount)
           .map((v) => (
-            <SlideScrollLinked slideTransitions={[translateIn()]}>
+            <SlideScrollLinked slideTransitions={[opacityInOut()]}>
               {v}
             </SlideScrollLinked>
           ))}
       </SoloSlidesScrollLinked>
-    </DirectionProvider>
+    </FadeConfigProvider>
   );
 }
-export default CoverSlidesScrollLinked;
+export default FadeSlidesScrollLinked;

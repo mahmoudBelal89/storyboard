@@ -9,9 +9,9 @@ export type SoloSlidesScrollLinkedContextProps = {
   isDisabledWhileTransition: boolean;
 };
 export type SoloSlidesScrollLinkedContextType = {
+  props: SoloSlidesScrollLinkedContextProps;
   slideIndex: number;
   transitionProgress: MotionValue<number>;
-  props: SoloSlidesScrollLinkedContextProps;
 };
 export const SoloSlidesScrollLinkedContext =
   createContext<SoloSlidesScrollLinkedContextType>(null!);
@@ -68,12 +68,12 @@ function SoloSlidesScrollLinked({
               >
                 <SoloSlidesScrollLinkedContext.Provider
                   value={{
-                    slideIndex: i,
-                    transitionProgress: transitionProgress,
                     props: {
                       isZIndexNegative: isZIndexNegative,
                       isDisabledWhileTransition: isDisabledWhileTransition,
                     },
+                    slideIndex: i,
+                    transitionProgress: transitionProgress,
                   }}
                 >
                   {v}

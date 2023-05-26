@@ -6,21 +6,21 @@ import DirectionProvider from './DirectionProvider';
 import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
 import SoloSlidesScrollLinked from './SoloSlidesScrollLinked';
 import SlideScrollLinked from './SlideScrollLinked';
-import { translateIn } from './slide-transition';
+import { translateOut } from './slide-transition';
 
 type Props = {
   direction?: Direction;
   children: ReactNode;
 };
 
-function CoverSlidesScrollLinked({ direction = 'left', children }: Props) {
+function UncoverSlidesScrollLinked({ direction = 'left', children }: Props) {
   return (
     <DirectionProvider direction={direction}>
-      <SoloSlidesScrollLinked>
+      <SoloSlidesScrollLinked isZIndexNegative={true}>
         {React.Children.toArray(children)
           .slice(0, useContext(SlidesScrollLinkedContext).props.slidesCount)
           .map((v) => (
-            <SlideScrollLinked slideTransitions={[translateIn()]}>
+            <SlideScrollLinked slideTransitions={[translateOut()]}>
               {v}
             </SlideScrollLinked>
           ))}
@@ -28,4 +28,4 @@ function CoverSlidesScrollLinked({ direction = 'left', children }: Props) {
     </DirectionProvider>
   );
 }
-export default CoverSlidesScrollLinked;
+export default UncoverSlidesScrollLinked;

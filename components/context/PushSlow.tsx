@@ -4,7 +4,7 @@ import React, { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../constants';
 import { Direction } from '../types';
-import { xy } from '../helper';
+import { dimensions } from '../helper';
 import { PlaySlowContext } from './PlaySlow';
 
 type Props = {
@@ -21,7 +21,7 @@ function PushSlow({ direction = 'left', children }: Props) {
       ? -v * 100
       : v * 100 - 100 * (scenesCount - 1);
   });
-  const [x, y] = xy(direction, position);
+  const [x, y] = dimensions(direction, position);
 
   return (
     <motion.div
