@@ -5,7 +5,7 @@ import { motion, useTransform } from 'framer-motion';
 import { Direction } from './types';
 import { xy } from './helper';
 import { LayerScrollLinkedContext } from './LayerScrollLinked';
-import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
+import { PresentationContext } from './Presentation';
 
 type Props = {
   direction?: Direction;
@@ -52,7 +52,7 @@ function ParallaxLayerScrollLinked({
         ...xy(
           direction,
           useTransform(
-            useContext(SlidesScrollLinkedContext).slidesProgress,
+            useContext(PresentationContext).slidesProgress,
             [
               layerExtent.fromSlide - 1,
               layerExtent.fromSlide,

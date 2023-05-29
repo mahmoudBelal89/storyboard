@@ -10,7 +10,7 @@ import SpaceImage from '../resources/images/space.png';
 import TreesImage from '../resources/images/trees.jpg';
 import UmbrellaImage from '../resources/images/umbrella.jpg';
 
-import SlidesScrollLinked from '@/components/SlidesScrollLinked';
+import Presentation from '@/components/Presentation';
 import SoloSlidesScrollLinked from '@/components/SoloSlidesScrollLinked';
 import DirectionProvider from '@/components/DirectionProvider';
 import SlideScrollLinked from '@/components/SlideScrollLinked';
@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <SlidesScrollLinked slidesCount={5}>
+      <Presentation slidesCount={5}>
         <PushSlidesScrollLinked>
           <Image
             src={FighterImage}
@@ -67,9 +67,9 @@ export default function Home() {
             </div>
           </ParallaxLayerScrollLinked>
         </LayerScrollLinked>
-      </SlidesScrollLinked>
+      </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <SlidesScrollLinked slidesCount={5}>
+      <Presentation slidesCount={5}>
         <DirectionProvider direction='left'>
           <FadeConfigProvider fadeConfig='smoothly'>
             <SoloSlidesScrollLinked>
@@ -121,9 +121,9 @@ export default function Home() {
             </SoloSlidesScrollLinked>
           </FadeConfigProvider>
         </DirectionProvider>
-      </SlidesScrollLinked>
+      </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <SlidesScrollLinked slidesCount={5}>
+      <Presentation slidesCount={5}>
         <CoverSlidesScrollLinked direction='up'>
           <Image
             src={FighterImage}
@@ -151,7 +151,7 @@ export default function Home() {
             className='viewport object-cover'
           />
         </CoverSlidesScrollLinked>
-      </SlidesScrollLinked>
+      </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       {/*       <PushSlow direction='right'>
         <Image

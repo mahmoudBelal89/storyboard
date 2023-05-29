@@ -9,9 +9,7 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
 import { FadeOptions } from '../components/types';
-import SlidesScrollLinked, {
-  PlaySlowDefaultProps,
-} from '../components/SlidesScrollLinked';
+import Presentation, { PlaySlowDefaultProps } from '../components/Presentation';
 
 type Props = {
   sketchesCount?: number;
@@ -87,7 +85,7 @@ function FadeScrollLinked({
   };
 
   return (
-    <SlidesScrollLinked
+    <Presentation
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -95,7 +93,7 @@ function FadeScrollLinked({
       transitionExtent={transitionExtent}
     >
       {render}
-    </SlidesScrollLinked>
+    </Presentation>
   );
 }
 export default FadeScrollLinked;

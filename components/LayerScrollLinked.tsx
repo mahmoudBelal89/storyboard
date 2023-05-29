@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
-import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
+import { PresentationContext } from './Presentation';
 
 export type LayerScrollLinkedContextProps = {
   layerExtent: { fromSlide: number; toSlide: number };
@@ -26,7 +26,7 @@ function LayerScrollLinked({
   isDisabledOutOfExtent = false,
   children,
 }: Props) {
-  const slidesProgress = useContext(SlidesScrollLinkedContext).slidesProgress;
+  const slidesProgress = useContext(PresentationContext).slidesProgress;
   const layerProgress = useTransform(
     slidesProgress,
     [layerExtent.fromSlide, layerExtent.toSlide],

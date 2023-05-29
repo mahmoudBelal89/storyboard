@@ -2,7 +2,7 @@
 
 import React, { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
-import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
+import { PresentationContext } from './Presentation';
 
 export type SoloSlidesScrollLinkedContextProps = {
   isZIndexNegative: boolean;
@@ -27,7 +27,7 @@ function SoloSlidesScrollLinked({
   isDisabledWhileTransition = true,
   children,
 }: Props) {
-  const slidesContext = useContext(SlidesScrollLinkedContext);
+  const slidesContext = useContext(PresentationContext);
   const slidesCount = slidesContext.props.slidesCount;
   const slidesProgress = slidesContext.slidesProgress;
 

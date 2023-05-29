@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useContext } from 'react';
 import { FadeOptions } from './types';
-import { SlidesScrollLinkedContext } from './SlidesScrollLinked';
+import { PresentationContext } from './Presentation';
 import SoloSlidesScrollLinked from './SoloSlidesScrollLinked';
 import SlideScrollLinked from './SlideScrollLinked';
 import { opacityInOut } from './slide-transition';
@@ -18,7 +18,7 @@ function FadeSlidesScrollLinked({ fadeConfig = 'smoothly', children }: Props) {
     <FadeConfigProvider fadeConfig={fadeConfig}>
       <SoloSlidesScrollLinked>
         {React.Children.toArray(children)
-          .slice(0, useContext(SlidesScrollLinkedContext).props.slidesCount)
+          .slice(0, useContext(PresentationContext).props.slidesCount)
           .map((v) => (
             <SlideScrollLinked slideTransitions={[opacityInOut()]}>
               {v}

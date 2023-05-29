@@ -18,13 +18,14 @@ export type SlidesScrollLinkedContextProps = {
   isSpring: boolean;
   springConfig?: SpringOptions;
 };
-export type SlidesScrollLinkedContextType = {
+export type PresentationContextType = {
   props: SlidesScrollLinkedContextProps;
   scrollProgress: MotionValue<number>;
   slidesProgress: MotionValue<number>;
 };
-export const SlidesScrollLinkedContext =
-  createContext<SlidesScrollLinkedContextType>(null!);
+export const PresentationContext = createContext<PresentationContextType>(
+  null!
+);
 
 type Props = {
   slidesCount?: number;
@@ -37,7 +38,7 @@ type Props = {
   children: ReactNode;
 };
 
-function SlidesScrollLinked({
+function Presentation({
   slidesCount = 2,
   height = slidesCount * 350 + 'vh',
   backgroundColor,
@@ -81,7 +82,7 @@ function SlidesScrollLinked({
       }}
     >
       <div className='sticky-viewport'>
-        <SlidesScrollLinkedContext.Provider
+        <PresentationContext.Provider
           value={{
             props: {
               slidesCount: slidesCount,
@@ -97,9 +98,9 @@ function SlidesScrollLinked({
           }}
         >
           {children}
-        </SlidesScrollLinkedContext.Provider>
+        </PresentationContext.Provider>
       </div>
     </div>
   );
 }
-export default SlidesScrollLinked;
+export default Presentation;

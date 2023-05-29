@@ -3,7 +3,7 @@
 import React, { ReactNode, useRef } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../components/constants';
-import SlidesScrollLinked from '../components/SlidesScrollLinked';
+import Presentation from '../components/Presentation';
 import { getScrollDirectionOfStickyScrollLinked } from './transform';
 
 type Props = {
@@ -86,7 +86,7 @@ function FadeScrollLinked({
   };
 
   return (
-    <SlidesScrollLinked
+    <Presentation
       sketchesCount={sketchesCount}
       height={height}
       backgroundColor={backgroundColor}
@@ -94,7 +94,7 @@ function FadeScrollLinked({
       transitionExtent={transitionExtent}
     >
       {render}
-    </SlidesScrollLinked>
+    </Presentation>
   );
 }
 export default FadeScrollLinked;
