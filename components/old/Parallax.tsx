@@ -3,9 +3,9 @@
 import { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { Direction } from './types';
-import { xy } from './helper';
-import { LayerScrollLinkedContext } from './LayerScrollLinked';
+import { triggerMotion, xy } from './helper/motion-value-helper';
 import { PresentationContext } from './Presentation';
+import { LayerContext } from './Layer';
 
 type Props = {
   direction?: Direction;
@@ -14,16 +14,17 @@ type Props = {
   children: ReactNode;
 };
 
-function ParallaxLayerScrollLinked({
+function Parallax({
   direction = 'up',
   length,
   isStickyToExtent = true,
   children,
 }: Props) {
-  const layerContext = useContext(LayerScrollLinkedContext);
+  const layerContext = useContext(LayerContext);
   const layerExtent = layerContext.props.layerExtent;
-  const layerProgress = layerContext.layerProgress;
+  let layerProgress = layerContext.layerProgress;
 
+  const extentLength = layerExtent.toSlide - layerExtent.fromSlide;
   const dimensions =
     direction === 'up' || direction === 'down'
       ? {
@@ -38,11 +39,13 @@ function ParallaxLayerScrollLinked({
           minWidth: length + 'vw',
           maxWidth: length + 'vw',
         };
+
+  layerProgress = triggerMotion(layerProgress);
   const position = xy(
     direction,
     direction === 'left' || direction === 'up'
-      ? useTransform(layerProgress, [0, 1], [0, -(length - 100)])
-      : useTransform(layerProgress, [0, 1], [-(length - 100), 0])
+      ? useTransform(layerProgress, [0, extentLength], [0, -(length - 100)])
+      : useTransform(layerProgress, [0, extentLength], [-(length - 100), 0])
   );
 
   return isStickyToExtent ? (
@@ -52,13 +55,8 @@ function ParallaxLayerScrollLinked({
         ...xy(
           direction,
           useTransform(
-            useContext(PresentationContext).slidesProgress,
-            [
-              layerExtent.fromSlide - 1,
-              layerExtent.fromSlide,
-              layerExtent.toSlide,
-              layerExtent.toSlide + 1,
-            ],
+            layerProgress,
+            [-1, 0, extentLength, extentLength + 1],
             [100, 0, 0, -100]
           )
         ),
@@ -86,4 +84,4 @@ function ParallaxLayerScrollLinked({
     </motion.div>
   );
 }
-export default ParallaxLayerScrollLinked;
+export default Parallax;

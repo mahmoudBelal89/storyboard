@@ -4,8 +4,8 @@ import React, { ReactNode, useContext } from 'react';
 import { Direction } from './types';
 import DirectionProvider from './DirectionProvider';
 import { PresentationContext } from './Presentation';
-import SoloSlidesScrollLinked from './SoloSlidesScrollLinked';
-import SlideScrollLinked from './SlideScrollLinked';
+import Slides from './Slides';
+import Slide from './Slide';
 import { translateOut } from './slide-transition';
 
 type Props = {
@@ -16,15 +16,13 @@ type Props = {
 function UncoverSlidesScrollLinked({ direction = 'left', children }: Props) {
   return (
     <DirectionProvider direction={direction}>
-      <SoloSlidesScrollLinked isZIndexNegative={true}>
+      <Slides isZIndexNegative={true}>
         {React.Children.toArray(children)
           .slice(0, useContext(PresentationContext).props.slidesCount)
           .map((v) => (
-            <SlideScrollLinked slideTransitions={[translateOut()]}>
-              {v}
-            </SlideScrollLinked>
+            <Slide slideTransitions={[translateOut()]}>{v}</Slide>
           ))}
-      </SoloSlidesScrollLinked>
+      </Slides>
     </DirectionProvider>
   );
 }

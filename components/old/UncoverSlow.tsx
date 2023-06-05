@@ -8,7 +8,7 @@ import {
   SpringOptions,
 } from 'framer-motion';
 import { Direction } from '../types';
-import { xy } from '../helper';
+import { xy } from '../helper/motion-value-helper';
 import ActSlow from './ActSlow';
 
 type Props = {

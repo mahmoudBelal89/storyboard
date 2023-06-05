@@ -4,7 +4,7 @@ import React, { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../constants';
 import { Direction } from '../types';
-import { dimensions } from '../helper';
+import { dimensions } from '../helper/motion-value-helper';
 import { PlaySlowContext } from './PlaySlow';
 
 type Props = {

@@ -11,9 +11,9 @@ import TreesImage from '../resources/images/trees.jpg';
 import UmbrellaImage from '../resources/images/umbrella.jpg';
 
 import Presentation from '@/components/Presentation';
-import SoloSlidesScrollLinked from '@/components/SoloSlidesScrollLinked';
+import Slides from '@/components/Slides';
 import DirectionProvider from '@/components/DirectionProvider';
-import SlideScrollLinked from '@/components/SlideScrollLinked';
+import Slide from '@/components/Slide';
 import {
   opacityInOut,
   translateIn,
@@ -22,8 +22,7 @@ import {
 } from '@/components/slide-transition';
 import FadeConfigProvider from '@/components/FadeConfigProvider';
 import CoverSlidesScrollLinked from '@/components/CoverSlidesScrollLinked';
-import LayerScrollLinked from '@/components/LayerScrollLinked';
-import ParallaxLayerScrollLinked from '@/components/ParallaxLayerScrollLinked';
+import Parallax from '@/components/Parallax';
 import PushSlidesScrollLinked from '@/components/PushSlidesScrollLinked';
 
 export default function Home() {
@@ -58,67 +57,55 @@ export default function Home() {
             className='viewport object-cover opacity-50'
           />
         </PushSlidesScrollLinked>
-        <LayerScrollLinked layerExtent={{ fromSlide: 1, toSlide: 3 }}>
-          <ParallaxLayerScrollLinked direction='right' length={150}>
-            <div className='flex'>
-              <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 ' />
-              <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-red-600 border-8 ' />
-              <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-yellow-800 border-8 ' />
-            </div>
-          </ParallaxLayerScrollLinked>
-        </LayerScrollLinked>
+        <Parallax length={350}>
+          <div className='min-w-[100vw] max-w-[100vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 opacity-0'></div>
+          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-red-400 border-8 opacity-50' />
+          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-red-600 border-8 opacity-50' />
+          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-yellow-800 border-8 opacity-50' />
+          <div className='min-w-[100vw] max-w-[100vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 opacity-0'></div>
+        </Parallax>
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
         <DirectionProvider direction='left'>
           <FadeConfigProvider fadeConfig='smoothly'>
-            <SoloSlidesScrollLinked>
-              <SlideScrollLinked
-                slideTransitions={[translateInOut(), opacityInOut()]}
-              >
+            <Slides>
+              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={FighterImage}
                   alt='fighter'
                   className='viewport object-cover'
                 />
-              </SlideScrollLinked>
-              <SlideScrollLinked
-                slideTransitions={[translateInOut(), opacityInOut()]}
-              >
+              </Slide>
+              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={HouseImage}
                   alt='house'
                   className='viewport object-cover'
                 />
-              </SlideScrollLinked>
-              <SlideScrollLinked
-                slideTransitions={[translateInOut(), opacityInOut()]}
-              >
+              </Slide>
+              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={SpaceImage}
                   alt='space'
                   className='viewport object-cover'
                 />
-              </SlideScrollLinked>
-              <SlideScrollLinked
-                slideTransitions={[translateInOut(), opacityInOut()]}
-              >
+              </Slide>
+              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={TreesImage}
                   alt='trees'
                   className='viewport object-cover'
                 />
-              </SlideScrollLinked>
-              <SlideScrollLinked
-                slideTransitions={[translateInOut(), opacityInOut()]}
-              >
+              </Slide>
+              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={UmbrellaImage}
                   alt='umbrella'
                   className='viewport object-cover'
                 />
-              </SlideScrollLinked>
-            </SoloSlidesScrollLinked>
+              </Slide>
+            </Slides>
           </FadeConfigProvider>
         </DirectionProvider>
       </Presentation>

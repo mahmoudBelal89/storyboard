@@ -9,7 +9,7 @@ import {
 } from 'framer-motion';
 import { Direction } from '../types';
 import PlaySlow, { PlaySlowDefaultProps } from '../old/PlaySlow';
-import { xy } from '../helper';
+import { xy } from '../helper/motion-value-helper';
 
 type Props = {
   direction?: Direction;

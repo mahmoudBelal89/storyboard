@@ -3,9 +3,9 @@
 import { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { Direction } from '../types';
-import { xy } from '../helper';
+import { xy } from '../helper/motion-value-helper';
 import { DirectionContext } from '../DirectionProvider';
-import { SoloSlidesScrollLinkedContext } from '../SoloSlidesScrollLinked';
+import { SlidesContext } from '../Slides';
 
 type Props = {
   direction?: Direction;
@@ -17,9 +17,7 @@ function CoverScrollLinked({ direction, children }: Props) {
   if (!direction) {
     direction = directionContext ?? 'left';
   }
-  const transitionProgress = useContext(
-    SoloSlidesScrollLinkedContext
-  ).transitionProgress;
+  const transitionProgress = useContext(SlidesContext).slideProgress;
   const position =
     direction === 'left' || direction === 'up'
       ? useTransform(transitionProgress, [-1, 0], [100, 0])

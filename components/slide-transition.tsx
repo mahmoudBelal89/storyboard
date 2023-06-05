@@ -1,29 +1,30 @@
 import { useContext } from 'react';
 import { MotionValue, useTransform } from 'framer-motion';
 import { Direction, FadeOptions } from './types';
-import { xy } from './helper';
+import { xy } from './helper/motion-value-helper';
 import { DirectionContext } from './DirectionProvider';
 import { FadeConfigContext } from './FadeConfigProvider';
 
 export function translateIn(
-  direction?: Direction
-): (transitionProgress: MotionValue<number>) => any {
-  return (transitionProgress: MotionValue<number>) => {
+  direction?: Direction,
+  value = 100
+): (slideProgress: MotionValue<number>) => any {
+  return (slideProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
     }
     return xy(
-      direction,
       direction === 'left' || direction === 'up'
-        ? useTransform(transitionProgress, [-1, 0], [100, 0])
-        : useTransform(transitionProgress, [-1, 0], [-100, 0])
+        ? useTransform(slideProgress, [-1, 0], [value, 0])
+        : useTransform(slideProgress, [-1, 0], [-value, 0]),
+      direction
     );
   };
 }
 
 export function translateOut(
   direction?: Direction
-): (transitionProgress: MotionValue<number>) => any {
+): (slideProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
@@ -39,7 +40,7 @@ export function translateOut(
 
 export function translateInOut(
   direction?: Direction
-): (transitionProgress: MotionValue<number>) => any {
+): (slideProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!direction) {
       direction = useContext(DirectionContext) ?? 'left';
@@ -55,7 +56,7 @@ export function translateInOut(
 
 export function opacityInOut(
   fadeConfig?: FadeOptions
-): (transitionProgress: MotionValue<number>) => any {
+): (slideProgress: MotionValue<number>) => any {
   return (transitionProgress: MotionValue<number>) => {
     if (!fadeConfig) {
       fadeConfig = useContext(FadeConfigContext) ?? 'smoothly';

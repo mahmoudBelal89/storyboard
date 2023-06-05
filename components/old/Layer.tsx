@@ -4,48 +4,48 @@ import { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { PresentationContext } from './Presentation';
 
-export type LayerScrollLinkedContextProps = {
-  layerExtent: { fromSlide: number; toSlide: number };
+export type LayerContextProps = {
+  layerExtent: { fromSlide: number; slidesCount: number };
   isDisabledOutOfExtent: boolean;
 };
-export type LayerScrollLinkedContextType = {
-  props: LayerScrollLinkedContextProps;
+export type LayerContextType = {
+  props: LayerContextProps;
   layerProgress: MotionValue<number>;
 };
-export const LayerScrollLinkedContext =
-  createContext<LayerScrollLinkedContextType>(null!);
+export const LayerContext = createContext<LayerContextType>(null!);
 
 type Props = {
-  layerExtent: { fromSlide: number; toSlide: number };
+  layerExtent: { fromSlide: number; slidesCount: number };
   isDisabledOutOfExtent?: boolean;
   children: ReactNode;
 };
 
-function LayerScrollLinked({
+function Layer({
   layerExtent,
   isDisabledOutOfExtent = false,
   children,
 }: Props) {
-  const slidesProgress = useContext(PresentationContext).slidesProgress;
   const layerProgress = useTransform(
-    slidesProgress,
-    [layerExtent.fromSlide, layerExtent.toSlide],
-    [0, 1]
+    useContext(PresentationContext).presentationProgress,
+    [
+      layerExtent.fromSlide - 1,
+      layerExtent.fromSlide + layerExtent.slidesCount + 1,
+    ],
+    [-1, layerExtent.slidesCount + 1]
   );
+
   return (
     <motion.div
       className='absolute viewport'
       style={{
         display: isDisabledOutOfExtent
-          ? useTransform(slidesProgress, (v) =>
-              v < layerExtent.fromSlide || v > layerExtent.toSlide
-                ? 'none'
-                : 'block'
+          ? useTransform(layerProgress, (v) =>
+              v <= -1 || v >= layerExtent.slidesCount + 1 ? 'none' : 'block'
             )
           : undefined,
       }}
     >
-      <LayerScrollLinkedContext.Provider
+      <LayerContext.Provider
         value={{
           props: {
             layerExtent: layerExtent,
@@ -55,8 +55,8 @@ function LayerScrollLinked({
         }}
       >
         {children}
-      </LayerScrollLinkedContext.Provider>
+      </LayerContext.Provider>
     </motion.div>
   );
 }
-export default LayerScrollLinked;
+export default Layer;

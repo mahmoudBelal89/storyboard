@@ -3,7 +3,7 @@
 import { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { Direction } from '../types';
-import { dimensions } from '../helper';
+import { dimensions } from '../helper/motion-value-helper';
 import { ActSlowContext } from './ActSlow';
 
 type Props = {

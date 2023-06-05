@@ -1,27 +1,19 @@
 'use client';
 
 import { ReactNode, useRef, createContext } from 'react';
-import {
-  MotionValue,
-  useScroll,
-  useTransform,
-  useSpring,
-  SpringOptions,
-} from 'framer-motion';
+import { MotionValue, useScroll, useTransform } from 'framer-motion';
 
-export type SlidesScrollLinkedContextProps = {
+export type PresentationContextProps = {
   slidesCount: number;
   height: string;
   backgroundColor?: string;
   offset: any;
   transitionExtent: number;
-  isSpring: boolean;
-  springConfig?: SpringOptions;
 };
 export type PresentationContextType = {
-  props: SlidesScrollLinkedContextProps;
+  props: PresentationContextProps;
   scrollProgress: MotionValue<number>;
-  slidesProgress: MotionValue<number>;
+  presentationProgress: MotionValue<number>;
 };
 export const PresentationContext = createContext<PresentationContextType>(
   null!
@@ -33,8 +25,6 @@ type Props = {
   backgroundColor?: string;
   offset?: any;
   transitionExtent?: number;
-  isSpring?: boolean;
-  springConfig?: SpringOptions;
   children: ReactNode;
 };
 
@@ -44,8 +34,6 @@ function Presentation({
   backgroundColor,
   offset = slidesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
   transitionExtent = 1.2,
-  isSpring = true,
-  springConfig = isSpring ? { damping: 19 } : undefined,
   children,
 }: Props) {
   const root = useRef(null);
@@ -53,7 +41,7 @@ function Presentation({
     target: root,
     offset: offset,
   });
-  let slidesProgress = scrollYProgress;
+  let presentationProgress = scrollYProgress;
   if (slidesCount > 2) {
     const totalExtent = slidesCount + transitionExtent * (slidesCount - 1);
     const inputRange: number[] = [];
@@ -65,10 +53,11 @@ function Presentation({
       );
       outputRange.push(i, i);
     }
-    slidesProgress = useTransform(slidesProgress, inputRange, outputRange);
-  }
-  if (isSpring) {
-    slidesProgress = useSpring(slidesProgress, springConfig);
+    presentationProgress = useTransform(
+      scrollYProgress,
+      inputRange,
+      outputRange
+    );
   }
 
   return (
@@ -90,11 +79,9 @@ function Presentation({
               backgroundColor: backgroundColor,
               offset: offset,
               transitionExtent: transitionExtent,
-              isSpring: isSpring,
-              springConfig: springConfig,
             },
             scrollProgress: scrollYProgress,
-            slidesProgress: slidesProgress,
+            presentationProgress: presentationProgress,
           }}
         >
           {children}

@@ -9,7 +9,7 @@ import {
 } from 'framer-motion';
 import { _FLEX_DIRECTION_VARIANTS } from '../constants';
 import { Direction } from '../types';
-import { xy } from '../helper';
+import { xy } from '../helper/motion-value-helper';
 import { PlaySlowDefaultProps } from '../old/PlaySlow';
 
 type Props = {

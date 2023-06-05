@@ -8,7 +8,7 @@ import {
   ValueAnimationTransition,
 } from 'framer-motion';
 import { Direction } from '../types';
-import { xy } from '../helper';
+import { xy } from '../helper/motion-value-helper';
 import Act from './Act';
 
 type Props = {
