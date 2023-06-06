@@ -49,7 +49,7 @@ function Push({
     return (
       <motion.div
         className={`flex ${_FLEX_DIRECTION_VARIANTS[direction]} fit`}
-        style={{ ...xy(direction, position) }}
+        style={{ ...xy(position, direction) }}
       >
         {React.Children.toArray(children)
           .slice(0, scenesCount)

@@ -11,7 +11,7 @@ import { Direction } from '../types';
 export function round(value: MotionValue<number>) {
   return useTransform(value, (v) => Math.round(v));
 }
-export function triggerMotionAtIntegers(
+export function animateAtIntegers(
   value: MotionValue<number>,
   transition?: ValueAnimationTransition<number>
 ) {

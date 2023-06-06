@@ -2,31 +2,31 @@
 
 import { ReactNode, useContext } from 'react';
 import { motion, MotionValue } from 'framer-motion';
-import { scrollAnimationType } from './types';
+import { ScrollAnimationType } from './types';
+import { animateAtIntegers } from './helper/motion-value-helper';
 import { SlideContext } from './Slides';
-import { triggerMotionAtIntegers } from './helper/motion-value-helper';
 
 type Props = {
-  animationType?: scrollAnimationType;
-  slideTransitions: ((slideProgress: MotionValue<number>) => any)[];
+  scrollAnimationType?: ScrollAnimationType;
+  transitions: ((slideProgress: MotionValue<number>) => any)[];
   children: ReactNode;
 };
 
 function Slide({
-  animationType = 'scrollTriggered',
-  slideTransitions,
+  scrollAnimationType = 'scrollTriggered',
+  transitions,
   children,
 }: Props) {
   let slideProgress = useContext(SlideContext).slideProgress;
-  if (animationType === 'scrollTriggered') {
-    slideProgress = triggerMotionAtIntegers(slideProgress);
+  if (scrollAnimationType === 'scrollTriggered') {
+    slideProgress = animateAtIntegers(slideProgress);
   }
 
   return (
     <motion.div
       className='absolute viewport'
       style={{
-        ...slideTransitions
+        ...transitions
           .map((v) => v(slideProgress))
           .reduce((prev, v) => ({ ...prev, ...v })),
       }}

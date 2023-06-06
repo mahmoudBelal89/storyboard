@@ -19,44 +19,47 @@ import {
   translateIn,
   translateInOut,
   translateOut,
-} from '@/components/slide-transition';
+} from '@/components/transition';
 import FadeConfigProvider from '@/components/FadeConfigProvider';
-import CoverSlidesScrollLinked from '@/components/CoverSlidesScrollLinked';
+import CoverSlides from '@/components/CoverSlides';
 import Parallax from '@/components/Parallax';
-import PushSlidesScrollLinked from '@/components/PushSlidesScrollLinked';
+import PushSlides from '@/components/PushSlides';
 
 export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
-        <PushSlidesScrollLinked>
+        <CoverSlides scrollAnimationType='scrollLinked'>
           <Image
             src={FighterImage}
             alt='fighter'
-            className='viewport object-cover opacity-50'
+            className='viewport object-cover'
           />
           <Image
             src={HouseImage}
             alt='house'
-            className='viewport object-cover opacity-50'
+            className='viewport object-cover'
           />
           <Image
             src={SpaceImage}
             alt='space'
-            className='viewport object-cover opacity-50'
+            className='viewport object-cover'
           />
           <Image
             src={TreesImage}
             alt='trees'
-            className='viewport object-cover opacity-50'
+            className='viewport object-cover'
           />
           <Image
             src={UmbrellaImage}
             alt='umbrella'
-            className='viewport object-cover opacity-50'
+            className='viewport object-cover'
           />
-        </PushSlidesScrollLinked>
+        </CoverSlides>
+      </Presentation>
+      <div className='w-screen h-[300vh] bg-blue-800'></div>
+      <Presentation slidesCount={5}>
         <Parallax length={350}>
           <div className='min-w-[100vw] max-w-[100vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 opacity-0'></div>
           <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-red-400 border-8 opacity-50' />
@@ -70,35 +73,35 @@ export default function Home() {
         <DirectionProvider direction='left'>
           <FadeConfigProvider fadeConfig='smoothly'>
             <Slides>
-              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
+              <Slide transitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={FighterImage}
                   alt='fighter'
                   className='viewport object-cover'
                 />
               </Slide>
-              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
+              <Slide transitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={HouseImage}
                   alt='house'
                   className='viewport object-cover'
                 />
               </Slide>
-              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
+              <Slide transitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={SpaceImage}
                   alt='space'
                   className='viewport object-cover'
                 />
               </Slide>
-              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
+              <Slide transitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={TreesImage}
                   alt='trees'
                   className='viewport object-cover'
                 />
               </Slide>
-              <Slide slideTransitions={[translateInOut(), opacityInOut()]}>
+              <Slide transitions={[translateInOut(), opacityInOut()]}>
                 <Image
                   src={UmbrellaImage}
                   alt='umbrella'
@@ -111,7 +114,7 @@ export default function Home() {
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
-        <CoverSlidesScrollLinked direction='up'>
+        <CoverSlides direction='up'>
           <Image
             src={FighterImage}
             alt='fighter'
@@ -137,7 +140,7 @@ export default function Home() {
             alt='umbrella'
             className='viewport object-cover'
           />
-        </CoverSlidesScrollLinked>
+        </CoverSlides>
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       {/*       <PushSlow direction='right'>

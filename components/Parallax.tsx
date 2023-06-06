@@ -33,7 +33,6 @@ function Parallax({ direction = 'up', length, children }: Props) {
         };
 
   const position = xy(
-    direction,
     direction === 'left' || direction === 'up'
       ? useTransform(
           presentationProgress,
@@ -44,7 +43,8 @@ function Parallax({ direction = 'up', length, children }: Props) {
           presentationProgress,
           [0, slidesCount - 1],
           [-(length - 100), 0]
-        )
+        ),
+    direction
   );
 
   return (
