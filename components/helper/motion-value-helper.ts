@@ -13,9 +13,10 @@ export function round(value: MotionValue<number>) {
 }
 export function animateAtIntegers(
   value: MotionValue<number>,
+  initial = -1,
   transition?: ValueAnimationTransition<number>
 ) {
-  const motion = motionValue(0);
+  const motion = motionValue(initial);
   useMotionValueEvent(round(value), 'change', (v) => {
     animate(motion, v, transition);
   });

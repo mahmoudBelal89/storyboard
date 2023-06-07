@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, useTransform } from 'framer-motion';
-import Push from '@/components/old/Push';
 
 import Image from 'next/image';
 import FighterImage from '../resources/images/fighter.jpg';
@@ -24,13 +23,37 @@ import FadeConfigProvider from '@/components/FadeConfigProvider';
 import CoverSlides from '@/components/CoverSlides';
 import Parallax from '@/components/Parallax';
 import PushSlides from '@/components/PushSlides';
+import BackgroundColor from '@/components/BackgroundColor';
 
 export default function Home() {
   return (
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
-        <CoverSlides scrollAnimationType='scrollLinked'>
+        <BackgroundColor
+          scrollAnimationType='scrollTriggered'
+          colors={['#f00', '#0f0', '#800080', '#FFC0CB', '#0ff']}
+        />
+      </Presentation>
+      <div className='w-screen h-[300vh] bg-blue-800'></div>
+      <Presentation slidesCount={5}>
+        <Parallax
+          length={250}
+          direction='left'
+          scrollAnimationType='scrollTriggered'
+        >
+          <div className='flex'>
+            <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-yellow-400 border-8 opacity-50'></div>
+            <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-green-400 border-8 opacity-50' />
+            <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-red-600 border-8 opacity-50' />
+            <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-blue-800 border-8 opacity-50' />
+            <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-purple-400 border-8 opacity-50'></div>
+          </div>
+        </Parallax>
+      </Presentation>
+      <div className='w-screen h-[300vh] bg-blue-800'></div>
+      <Presentation slidesCount={5}>
+        <CoverSlides scrollAnimationType='scrollTriggered'>
           <Image
             src={FighterImage}
             alt='fighter'
@@ -57,16 +80,6 @@ export default function Home() {
             className='viewport object-cover'
           />
         </CoverSlides>
-      </Presentation>
-      <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <Presentation slidesCount={5}>
-        <Parallax length={350}>
-          <div className='min-w-[100vw] max-w-[100vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 opacity-0'></div>
-          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-red-400 border-8 opacity-50' />
-          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-red-600 border-8 opacity-50' />
-          <div className='min-w-[100vw] max-w-[100vw] min-h-[50vh] max-h-[50vh] bg-yellow-800 border-8 opacity-50' />
-          <div className='min-w-[100vw] max-w-[100vw] min-h-[100vh] max-h-[100vh] bg-red-400 border-8 opacity-0'></div>
-        </Parallax>
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
@@ -203,32 +216,6 @@ export default function Home() {
           </button>
         </div>
       </PushSlow> */}
-      <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <Push backgroundColor='white' scenesCount={5}>
-        <Image
-          src={FighterImage}
-          alt='fighter'
-          className='viewport object-cover'
-        />
-        <Image src={HouseImage} alt='house' className='viewport object-cover' />
-        <Image src={SpaceImage} alt='space' className='viewport object-cover' />
-        <Image src={TreesImage} alt='trees' className='viewport object-cover' />
-        <Image
-          src={UmbrellaImage}
-          alt='umbrella'
-          className='viewport object-cover'
-        />
-      </Push>
-      <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <Push direction='left' backgroundColor='green' scenesCount={7}>
-        <div className={`viewport bg-red-400 border-8`} />
-        <div className={`viewport bg-red-600 border-8`} />
-        <div className={`viewport bg-yellow-800 border-8`} />
-        <div className={`viewport bg-green-400 border-8`} />
-        <div className={`viewport bg-orange-600 border-8`} />
-        <div className={`viewport bg-purple-800 border-8`} />
-        <div className={`viewport bg-black border-8`} />
-      </Push>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
     </main>
   );

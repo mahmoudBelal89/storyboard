@@ -2,22 +2,35 @@
 
 import { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
-import { Direction } from './types';
-import { xy } from './helper/motion-value-helper';
+import { ScrollAnimationType, Direction } from './types';
+import { DirectionContext } from './DirectionProvider';
+import { animateAtIntegers, xy } from './helper/motion-value-helper';
 import { PresentationContext } from './Presentation';
 
 type Props = {
+  scrollAnimationType?: ScrollAnimationType;
   direction?: Direction;
   length: number;
   children: ReactNode;
 };
 
-function Parallax({ direction = 'up', length, children }: Props) {
+function Parallax({
+  scrollAnimationType = 'scrollLinked',
+  direction,
+  length,
+  children,
+}: Props) {
+  if (!direction) {
+    direction = useContext(DirectionContext) ?? 'up';
+  }
   const presentationContext = useContext(PresentationContext);
   const slidesCount = presentationContext.props.slidesCount;
-  const presentationProgress = presentationContext.presentationProgress;
+  let presentationProgress = presentationContext.presentationProgress;
+  if (scrollAnimationType === 'scrollTriggered') {
+    presentationProgress = animateAtIntegers(presentationProgress, 0);
+  }
 
-  const dimensions =
+  const size =
     direction === 'up' || direction === 'down'
       ? {
           minHeight: length + 'vh',
@@ -32,27 +45,21 @@ function Parallax({ direction = 'up', length, children }: Props) {
           maxWidth: length + 'vw',
         };
 
-  const position = xy(
-    direction === 'left' || direction === 'up'
-      ? useTransform(
-          presentationProgress,
-          [0, slidesCount - 1],
-          [0, -(length - 100)]
-        )
-      : useTransform(
-          presentationProgress,
-          [0, slidesCount - 1],
-          [-(length - 100), 0]
-        ),
-    direction
-  );
-
   return (
     <motion.div
       className='absolute'
       style={{
-        ...dimensions,
-        ...position,
+        ...size,
+        ...xy(
+          useTransform(
+            presentationProgress,
+            [0, slidesCount - 1],
+            direction === 'left' || direction === 'up'
+              ? [0, -(length - 100)]
+              : [-(length - 100), 0]
+          ),
+          direction
+        ),
       }}
     >
       {children}

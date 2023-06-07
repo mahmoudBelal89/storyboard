@@ -17,9 +17,13 @@ function Slide({
   transitions,
   children,
 }: Props) {
-  let slideProgress = useContext(SlideContext).slideProgress;
+  const slideContext = useContext(SlideContext);
+  let slideProgress = slideContext.slideProgress;
   if (scrollAnimationType === 'scrollTriggered') {
-    slideProgress = animateAtIntegers(slideProgress);
+    slideProgress = animateAtIntegers(
+      slideProgress,
+      slideContext.slideIndex === 0 ? 0 : -1
+    );
   }
 
   return (
