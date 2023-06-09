@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useContext } from 'react';
-import { ScrollAnimationType, Direction } from './types';
+import { ScrollAnimation, ScrollTriggered, Direction } from './types';
 import { DirectionContext } from './DirectionProvider';
 import { PresentationContext } from './Presentation';
 import Slides from './Slides';
@@ -9,13 +9,13 @@ import Slide from './Slide';
 import { translateIn } from './transition';
 
 type Props = {
-  scrollAnimationType?: ScrollAnimationType;
+  scrollAnimation?: ScrollAnimation;
   direction?: Direction;
   children: ReactNode;
 };
 
 function CoverSlides({
-  scrollAnimationType = 'scrollTriggered',
+  scrollAnimation = new ScrollTriggered(),
   direction,
   children,
 }: Props) {
@@ -29,7 +29,7 @@ function CoverSlides({
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (
           <Slide
-            scrollAnimationType={scrollAnimationType}
+            scrollAnimation={scrollAnimation}
             transitions={[translateIn(direction)]}
           >
             {v}

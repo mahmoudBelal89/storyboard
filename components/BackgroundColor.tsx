@@ -2,24 +2,24 @@
 
 import { useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
-import { ScrollAnimationType } from './types';
-import { animateAtIntegers } from './helper/motion-value-helper';
+import { ScrollAnimation, ScrollTriggered } from './types';
+import { reshape } from './helper/motion-value-helper';
 import { PresentationContext } from './Presentation';
 
 type Props = {
-  scrollAnimationType?: ScrollAnimationType;
+  scrollAnimation?: ScrollAnimation;
   colors: string[];
 };
 
 function BackgroundColor({
-  scrollAnimationType = 'scrollTriggered',
+  scrollAnimation = new ScrollTriggered(),
   colors,
 }: Props) {
   const presentationContext = useContext(PresentationContext);
-  let presentationProgress = presentationContext.presentationProgress;
-  if (scrollAnimationType === 'scrollTriggered') {
-    presentationProgress = animateAtIntegers(presentationProgress, 0);
-  }
+  const presentationProgress = reshape(
+    presentationContext.presentationProgress,
+    scrollAnimation
+  );
 
   return (
     <motion.div

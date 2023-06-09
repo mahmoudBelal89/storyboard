@@ -1,41 +1,31 @@
 'use client';
 
 import React, { ReactNode, useContext } from 'react';
-import { ScrollAnimation, ScrollTriggered, FadeOptions } from './types';
-import { FadeConfigContext } from './FadeConfigProvider';
+import { ScrollAnimation, ScrollTriggered } from './types';
 import { PresentationContext } from './Presentation';
 import Slides from './Slides';
 import Slide from './Slide';
-import { fade } from './transition';
+import { zoomIn } from './transition';
 
 type Props = {
   scrollAnimation?: ScrollAnimation;
-  fadeConfig?: FadeOptions;
   children: ReactNode;
 };
 
-function FadeSlides({
+function ZoomInSlides({
   scrollAnimation = new ScrollTriggered(),
-  fadeConfig,
   children,
 }: Props) {
-  if (!fadeConfig) {
-    fadeConfig = useContext(FadeConfigContext) ?? 'smoothly';
-  }
-
   return (
     <Slides>
       {React.Children.toArray(children)
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (
-          <Slide
-            scrollAnimation={scrollAnimation}
-            transitions={[fade(fadeConfig)]}
-          >
+          <Slide scrollAnimation={scrollAnimation} transitions={zoomIn}>
             {v}
           </Slide>
         ))}
     </Slides>
   );
 }
-export default FadeSlides;
+export default ZoomInSlides;

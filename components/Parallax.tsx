@@ -2,32 +2,27 @@
 
 import { ReactNode, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
-import { ScrollAnimationType, Direction } from './types';
+import { ScrollAnimation, Direction } from './types';
 import { DirectionContext } from './DirectionProvider';
-import { animateAtIntegers, xy } from './helper/motion-value-helper';
+import { reshape, xy } from './helper/motion-value-helper';
 import { PresentationContext } from './Presentation';
 
 type Props = {
-  scrollAnimationType?: ScrollAnimationType;
+  scrollAnimation?: ScrollAnimation;
   direction?: Direction;
   length: number;
   children: ReactNode;
 };
 
-function Parallax({
-  scrollAnimationType = 'scrollLinked',
-  direction,
-  length,
-  children,
-}: Props) {
+function Parallax({ scrollAnimation, direction, length, children }: Props) {
   if (!direction) {
     direction = useContext(DirectionContext) ?? 'up';
   }
   const presentationContext = useContext(PresentationContext);
   const slidesCount = presentationContext.props.slidesCount;
   let presentationProgress = presentationContext.presentationProgress;
-  if (scrollAnimationType === 'scrollTriggered') {
-    presentationProgress = animateAtIntegers(presentationProgress, 0);
+  if (scrollAnimation) {
+    presentationProgress = reshape(presentationProgress, scrollAnimation);
   }
 
   const size =

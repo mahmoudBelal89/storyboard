@@ -24,6 +24,9 @@ import CoverSlides from '@/components/CoverSlides';
 import Parallax from '@/components/Parallax';
 import PushSlides from '@/components/PushSlides';
 import BackgroundColor from '@/components/BackgroundColor';
+import { ScrollLinked, ScrollTriggered } from '@/components/types';
+import ZoomInSlides from '@/components/ZoomInSlides';
+import ZoomOutSlides from '@/components/ZoomOutSlides';
 
 export default function Home() {
   return (
@@ -31,7 +34,7 @@ export default function Home() {
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
         <BackgroundColor
-          scrollAnimationType='scrollTriggered'
+          scrollAnimation={new ScrollTriggered({ type: 'spring', duration: 5 })}
           colors={['#f00', '#0f0', '#800080', '#FFC0CB', '#0ff']}
         />
       </Presentation>
@@ -40,7 +43,7 @@ export default function Home() {
         <Parallax
           length={250}
           direction='left'
-          scrollAnimationType='scrollTriggered'
+          scrollAnimation={new ScrollTriggered({ type: 'tween', duration: 1 })}
         >
           <div className='flex'>
             <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-yellow-400 border-8 opacity-50'></div>
@@ -53,7 +56,9 @@ export default function Home() {
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
-        <CoverSlides scrollAnimationType='scrollTriggered'>
+        <ZoomOutSlides
+          scrollAnimation={new ScrollTriggered({ type: 'tween', duration: 1 })}
+        >
           <Image
             src={FighterImage}
             alt='fighter'
@@ -79,7 +84,7 @@ export default function Home() {
             alt='umbrella'
             className='viewport object-cover'
           />
-        </CoverSlides>
+        </ZoomOutSlides>
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>

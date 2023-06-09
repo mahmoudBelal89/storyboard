@@ -2,26 +2,23 @@
 
 import { ReactNode, useContext } from 'react';
 import { motion, MotionValue } from 'framer-motion';
-import { ScrollAnimationType } from './types';
-import { animateAtIntegers } from './helper/motion-value-helper';
+import { ScrollAnimation } from './types';
+import { reshape } from './helper/motion-value-helper';
 import { SlideContext } from './Slides';
 
 type Props = {
-  scrollAnimationType?: ScrollAnimationType;
+  scrollAnimation?: ScrollAnimation;
   transitions: ((slideProgress: MotionValue<number>) => any)[];
   children: ReactNode;
 };
 
-function Slide({
-  scrollAnimationType = 'scrollTriggered',
-  transitions,
-  children,
-}: Props) {
+function Slide({ scrollAnimation, transitions, children }: Props) {
   const slideContext = useContext(SlideContext);
   let slideProgress = slideContext.slideProgress;
-  if (scrollAnimationType === 'scrollTriggered') {
-    slideProgress = animateAtIntegers(
+  if (scrollAnimation) {
+    slideProgress = reshape(
       slideProgress,
+      scrollAnimation,
       slideContext.slideIndex === 0 ? 0 : -1
     );
   }
