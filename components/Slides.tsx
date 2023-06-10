@@ -6,6 +6,7 @@ import { PresentationContext } from './Presentation';
 
 export type SlidesContextProps = {
   isZIndexNegative: boolean;
+  isHiddenWhileNoProgress: boolean;
   isDisabledWhileTransition: boolean;
 };
 export type SlidesContextType = {
@@ -21,13 +22,21 @@ export const SlideContext = createContext<SlideContextType>(null!);
 
 type Props = {
   isZIndexNegative?: boolean;
+  isHiddenWhileNoProgress?: boolean;
   isDisabledWhileTransition?: boolean;
+  width?: string;
+  height?: string;
+  className?: string;
   children: ReactNode;
 };
 
 function Slides({
   isZIndexNegative = false,
+  isHiddenWhileNoProgress = true,
   isDisabledWhileTransition = true,
+  width = '100%',
+  height = '100%',
+  className,
   children,
 }: Props) {
   const presentationContext = useContext(PresentationContext);
@@ -35,11 +44,19 @@ function Slides({
   const presentationProgress = presentationContext.presentationProgress;
 
   return (
-    <div className='absolute viewport'>
+    <div
+      className={`overflow-hidden ${className ?? ''}`}
+      style={{
+        minWidth: width,
+        maxWidth: width,
+        minHeight: height,
+        maxHeight: height,
+      }}
+    >
       {[
         isDisabledWhileTransition && (
           <motion.div
-            className='absolute viewport'
+            className='absolute fill-parent'
             style={{
               display: isDisabledWhileTransition
                 ? useTransform(presentationProgress, (v) =>
@@ -54,6 +71,7 @@ function Slides({
           value={{
             props: {
               isZIndexNegative: isZIndexNegative,
+              isHiddenWhileNoProgress: isHiddenWhileNoProgress,
               isDisabledWhileTransition: isDisabledWhileTransition,
             },
           }}
@@ -69,11 +87,13 @@ function Slides({
 
               return (
                 <motion.div
-                  className='absolute viewport'
+                  className='absolute fill-parent'
                   style={{
-                    display: useTransform(slideProgress, (v) =>
-                      v === -1 || v === 1 ? 'none' : 'block'
-                    ),
+                    display: isHiddenWhileNoProgress
+                      ? useTransform(slideProgress, (v) =>
+                          v === -1 || v === 1 ? 'none' : 'block'
+                        )
+                      : undefined,
                     zIndex: isZIndexNegative ? -i : i,
                   }}
                 >

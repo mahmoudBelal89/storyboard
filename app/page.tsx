@@ -33,6 +33,36 @@ export default function Home() {
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
+        <CoverSlides>
+          <Image
+            src={FighterImage}
+            alt='fighter'
+            className='fill-parent object-cover'
+          />
+          <Image
+            src={HouseImage}
+            alt='house'
+            className='fill-parent object-cover'
+          />
+          <Image
+            src={SpaceImage}
+            alt='space'
+            className='fill-parent object-cover'
+          />
+          <Image
+            src={TreesImage}
+            alt='trees'
+            className='fill-parent object-cover'
+          />
+          <Image
+            src={UmbrellaImage}
+            alt='umbrella'
+            className='fill-parent object-cover'
+          />
+        </CoverSlides>
+      </Presentation>
+      <div className='w-screen h-[300vh] bg-blue-800'></div>
+      <Presentation slidesCount={5}>
         <BackgroundColor
           scrollAnimation={new ScrollTriggered({ type: 'spring', duration: 5 })}
           colors={['#f00', '#0f0', '#800080', '#FFC0CB', '#0ff']}
@@ -53,38 +83,6 @@ export default function Home() {
             <div className='min-w-[50vw] max-w-[50vw] min-h-[100vh] max-h-[100vh] bg-purple-400 border-8 opacity-50'></div>
           </div>
         </Parallax>
-      </Presentation>
-      <div className='w-screen h-[300vh] bg-blue-800'></div>
-      <Presentation slidesCount={5}>
-        <ZoomOutSlides
-          scrollAnimation={new ScrollTriggered({ type: 'tween', duration: 1 })}
-        >
-          <Image
-            src={FighterImage}
-            alt='fighter'
-            className='viewport object-cover'
-          />
-          <Image
-            src={HouseImage}
-            alt='house'
-            className='viewport object-cover'
-          />
-          <Image
-            src={SpaceImage}
-            alt='space'
-            className='viewport object-cover'
-          />
-          <Image
-            src={TreesImage}
-            alt='trees'
-            className='viewport object-cover'
-          />
-          <Image
-            src={UmbrellaImage}
-            alt='umbrella'
-            className='viewport object-cover'
-          />
-        </ZoomOutSlides>
       </Presentation>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>

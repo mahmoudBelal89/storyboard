@@ -5,8 +5,6 @@ import { MotionValue, useScroll, useTransform } from 'framer-motion';
 
 export type PresentationContextProps = {
   slidesCount: number;
-  height: string;
-  backgroundColor?: string;
   offset: any;
   transitionExtent: number;
 };
@@ -21,19 +19,23 @@ export const PresentationContext = createContext<PresentationContextType>(
 
 type Props = {
   slidesCount?: number;
-  height?: string;
-  backgroundColor?: string;
   offset?: any;
   transitionExtent?: number;
+  width?: string;
+  height?: string;
+  className?: string;
+  stickyClassName?: string;
   children: ReactNode;
 };
 
 function Presentation({
   slidesCount = 2,
-  height = slidesCount * 350 + 'vh',
-  backgroundColor,
   offset = slidesCount === 2 ? ['0.5 1', '0.5 0'] : ['0 0', '1 1'],
   transitionExtent = 1.2,
+  width = '100vw',
+  height = slidesCount * 350 + 'vh',
+  className,
+  stickyClassName,
   children,
 }: Props) {
   const root = useRef(null);
@@ -63,20 +65,19 @@ function Presentation({
   return (
     <div
       ref={root}
-      className='viewport-width'
+      className={className}
       style={{
+        minWidth: width,
+        maxWidth: width,
         minHeight: height,
         maxHeight: height,
-        backgroundColor: backgroundColor,
       }}
     >
-      <div className='sticky-viewport'>
+      <div className={`presentation-sticky ${stickyClassName ?? ''}`}>
         <PresentationContext.Provider
           value={{
             props: {
               slidesCount: slidesCount,
-              height: height,
-              backgroundColor: backgroundColor,
               offset: offset,
               transitionExtent: transitionExtent,
             },

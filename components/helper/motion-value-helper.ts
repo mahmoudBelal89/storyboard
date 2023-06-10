@@ -40,7 +40,8 @@ export function reshape(
   return value;
 }
 export function xy(value: MotionValue<number>, direction: Direction) {
+  const _xy = useTransform(value, (v) => v + '%');
   return direction === 'left' || direction === 'right'
-    ? { x: useTransform(value, (v) => v + 'vw'), y: undefined }
-    : { x: undefined, y: useTransform(value, (v) => v + 'vh') };
+    ? { x: _xy, y: undefined }
+    : { x: undefined, y: _xy };
 }

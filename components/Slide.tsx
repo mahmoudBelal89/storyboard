@@ -25,7 +25,7 @@ function Slide({ scrollAnimation, transitions, children }: Props) {
 
   return (
     <motion.div
-      className='absolute viewport'
+      className='fill-parent'
       style={{
         ...transitions
           .map((v) => v(slideProgress))
