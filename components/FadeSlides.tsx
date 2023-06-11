@@ -11,12 +11,20 @@ import { fade } from './transition';
 type Props = {
   scrollAnimation?: ScrollAnimation;
   fadeConfig?: FadeOptions;
+  isHiddenWhileNoProgress?: boolean;
+  width?: string;
+  height?: string;
+  className?: string;
   children: ReactNode;
 };
 
 function FadeSlides({
   scrollAnimation = new ScrollTriggered(),
   fadeConfig,
+  isHiddenWhileNoProgress,
+  width,
+  height,
+  className,
   children,
 }: Props) {
   if (!fadeConfig) {
@@ -24,7 +32,12 @@ function FadeSlides({
   }
 
   return (
-    <Slides>
+    <Slides
+      isHiddenWhileNoProgress={isHiddenWhileNoProgress}
+      width={width}
+      height={height}
+      className={className}
+    >
       {React.Children.toArray(children)
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (

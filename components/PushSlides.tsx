@@ -11,12 +11,20 @@ import { translateInOut } from './transition';
 type Props = {
   scrollAnimation?: ScrollAnimation;
   direction?: Direction;
+  isHiddenWhileNoProgress?: boolean;
+  width?: string;
+  height?: string;
+  className?: string;
   children: ReactNode;
 };
 
 function PushSlides({
   scrollAnimation = new ScrollTriggered(),
   direction,
+  isHiddenWhileNoProgress,
+  width,
+  height,
+  className,
   children,
 }: Props) {
   if (!direction) {
@@ -24,7 +32,12 @@ function PushSlides({
   }
 
   return (
-    <Slides>
+    <Slides
+      isHiddenWhileNoProgress={isHiddenWhileNoProgress}
+      width={width}
+      height={height}
+      className={className}
+    >
       {React.Children.toArray(children)
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (

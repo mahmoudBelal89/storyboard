@@ -17,11 +17,14 @@ type Props = {
 function BackgroundColor({
   scrollAnimation = new ScrollTriggered(),
   colors,
-  width = '100%',
-  height = '100%',
+  width,
+  height = '100vh',
   className,
 }: Props) {
   const presentationContext = useContext(PresentationContext);
+  if (width === undefined) {
+    width = presentationContext.props.width;
+  }
   const presentationProgress = reshape(
     presentationContext.presentationProgress,
     scrollAnimation

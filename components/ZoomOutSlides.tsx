@@ -9,15 +9,29 @@ import { zoomOut } from './transition';
 
 type Props = {
   scrollAnimation?: ScrollAnimation;
+  isHiddenWhileNoProgress?: boolean;
+  width?: string;
+  height?: string;
+  className?: string;
   children: ReactNode;
 };
 
 function ZoomOutSlides({
   scrollAnimation = new ScrollTriggered(),
+  isHiddenWhileNoProgress,
+  width,
+  height,
+  className,
   children,
 }: Props) {
   return (
-    <Slides isZIndexNegative={true}>
+    <Slides
+      isZIndexNegative={true}
+      isHiddenWhileNoProgress={isHiddenWhileNoProgress}
+      width={width}
+      height={height}
+      className={className}
+    >
       {React.Children.toArray(children)
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (

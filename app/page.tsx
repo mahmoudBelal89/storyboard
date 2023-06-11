@@ -1,7 +1,5 @@
 'use client';
 
-import { motion, useTransform } from 'framer-motion';
-
 import Image from 'next/image';
 import FighterImage from '../resources/images/fighter.jpg';
 import HouseImage from '../resources/images/house.png';
@@ -13,12 +11,7 @@ import Presentation from '@/components/Presentation';
 import Slides from '@/components/Slides';
 import DirectionProvider from '@/components/DirectionProvider';
 import Slide from '@/components/Slide';
-import {
-  opacityInOut,
-  translateIn,
-  translateInOut,
-  translateOut,
-} from '@/components/transition';
+import { opacityInOut, translateInOut } from '@/components/transition';
 import FadeConfigProvider from '@/components/FadeConfigProvider';
 import CoverSlides from '@/components/CoverSlides';
 import Parallax from '@/components/Parallax';
@@ -33,31 +26,31 @@ export default function Home() {
     <main>
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
-        <CoverSlides>
+        <CoverSlides width='50vw' height='50vh'>
           <Image
             src={FighterImage}
             alt='fighter'
-            className='fill-parent object-cover'
+            className='min-w-[50vw] min-h-[50vh] object-cover'
           />
           <Image
             src={HouseImage}
             alt='house'
-            className='fill-parent object-cover'
+            className='min-w-[50vw] min-h-[50vh] object-cover'
           />
           <Image
             src={SpaceImage}
             alt='space'
-            className='fill-parent object-cover'
+            className='min-w-[50vw] min-h-[50vh] object-cover'
           />
           <Image
             src={TreesImage}
             alt='trees'
-            className='fill-parent object-cover'
+            className='min-w-[50vw] min-h-[50vh] object-cover'
           />
           <Image
             src={UmbrellaImage}
             alt='umbrella'
-            className='fill-parent object-cover'
+            className='min-w-[50vw] min-h-[50vh] object-cover'
           />
         </CoverSlides>
       </Presentation>
@@ -71,7 +64,7 @@ export default function Home() {
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Presentation slidesCount={5}>
         <Parallax
-          length={250}
+          parallaxSize={250}
           direction='left'
           scrollAnimation={new ScrollTriggered({ type: 'tween', duration: 1 })}
         >
@@ -158,67 +151,6 @@ export default function Home() {
           />
         </CoverSlides>
       </Presentation>
-      <div className='w-screen h-[300vh] bg-blue-800'></div>
-      {/*       <PushSlow direction='right'>
-        <Image
-          src={FighterImage}
-          alt='fighter'
-          className='viewport object-cover'
-        />
-        <Image src={HouseImage} alt='house' className='viewport object-cover' />
-        <Image src={SpaceImage} alt='space' className='viewport object-cover' />
-        <Image src={TreesImage} alt='trees' className='viewport object-cover' />
-        <Image
-          src={UmbrellaImage}
-          alt='umbrella'
-          className='viewport object-cover'
-        />
-
-        <div className=' viewport'>
-          <div className='m-4 bg-red-900 border rounded-2xl w-96 h-96'>
-            <button
-              className='m-4 w-52 border rounded-2xl bg-slate-400'
-              onClick={() => console.log('first')}
-            >
-              the first guy
-            </button>
-          </div>
-        </div>
-        <div className='viewport'>
-          <div className='mt-20 mx-8 bg-blue-900 border rounded-2xl w-96 h-96'>
-            <button
-              className='m-4 w-52 border rounded-2xl bg-slate-400'
-              onClick={() => console.log('second')}
-            >
-              the second guy
-            </button>
-          </div>
-        </div>
-        <div className='viewport bg-yellow-900 border-8'>
-          <button
-            className='w-52 bg-blue-400'
-            onClick={() => console.log('third')}
-          >
-            the third guy
-          </button>
-        </div>
-        <div className='viewport bg-green-900 border-8'>
-          <button
-            className='w-52 bg-red-400'
-            onClick={() => console.log('fourth')}
-          >
-            the fourth guy
-          </button>
-        </div>
-        <div className='viewport bg-pink-900 border-8'>
-          <button
-            className='w-52 bg-blue-400'
-            onClick={() => console.log('fifth')}
-          >
-            the fifth guy
-          </button>
-        </div>
-      </PushSlow> */}
       <div className='w-screen h-[300vh] bg-blue-800'></div>
     </main>
   );

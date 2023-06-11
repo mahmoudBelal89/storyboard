@@ -2,11 +2,14 @@
 
 import { ReactNode, useRef, createContext } from 'react';
 import { MotionValue, useScroll, useTransform } from 'framer-motion';
+import { add } from './helper/string-helper';
 
 export type PresentationContextProps = {
   slidesCount: number;
   offset: any;
   transitionExtent: number;
+  width: string;
+  height: string;
 };
 export type PresentationContextType = {
   props: PresentationContextProps;
@@ -24,7 +27,6 @@ type Props = {
   width?: string;
   height?: string;
   className?: string;
-  stickyClassName?: string;
   children: ReactNode;
 };
 
@@ -35,7 +37,6 @@ function Presentation({
   width = '100vw',
   height = slidesCount * 350 + 'vh',
   className,
-  stickyClassName,
   children,
 }: Props) {
   const root = useRef(null);
@@ -65,7 +66,7 @@ function Presentation({
   return (
     <div
       ref={root}
-      className={className}
+      className={add('overflow-hidden', className)}
       style={{
         minWidth: width,
         maxWidth: width,
@@ -73,13 +74,21 @@ function Presentation({
         maxHeight: height,
       }}
     >
-      <div className={`presentation-sticky ${stickyClassName ?? ''}`}>
+      <div
+        className='presentation-sticky'
+        style={{
+          minWidth: width,
+          maxWidth: width,
+        }}
+      >
         <PresentationContext.Provider
           value={{
             props: {
               slidesCount: slidesCount,
               offset: offset,
               transitionExtent: transitionExtent,
+              width: width,
+              height: height,
             },
             scrollProgress: scrollYProgress,
             presentationProgress: presentationProgress,

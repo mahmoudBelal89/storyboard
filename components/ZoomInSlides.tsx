@@ -9,15 +9,28 @@ import { zoomIn } from './transition';
 
 type Props = {
   scrollAnimation?: ScrollAnimation;
+  isHiddenWhileNoProgress?: boolean;
+  width?: string;
+  height?: string;
+  className?: string;
   children: ReactNode;
 };
 
 function ZoomInSlides({
   scrollAnimation = new ScrollTriggered(),
+  isHiddenWhileNoProgress,
+  width,
+  height,
+  className,
   children,
 }: Props) {
   return (
-    <Slides>
+    <Slides
+      isHiddenWhileNoProgress={isHiddenWhileNoProgress}
+      width={width}
+      height={height}
+      className={className}
+    >
       {React.Children.toArray(children)
         .slice(0, useContext(PresentationContext).props.slidesCount)
         .map((v) => (

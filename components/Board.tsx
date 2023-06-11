@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode, useContext } from 'react';
+import { add } from './helper/string-helper';
 import { PresentationContext, PresentationContextType } from './Presentation';
 
 type Props = {
@@ -10,15 +11,10 @@ type Props = {
   children: (context: PresentationContextType) => ReactNode;
 };
 
-function Board({
-  width = '100%',
-  height = '100%',
-  className,
-  children,
-}: Props) {
+function Board({ width, height = '100vh', className, children }: Props) {
   return (
     <div
-      className={className}
+      className={add('overflow-hidden', className)}
       style={{
         minWidth: width,
         maxWidth: width,

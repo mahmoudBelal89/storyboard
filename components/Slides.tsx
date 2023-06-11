@@ -2,12 +2,15 @@
 
 import React, { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
+import { add } from './helper/string-helper';
 import { PresentationContext } from './Presentation';
 
 export type SlidesContextProps = {
   isZIndexNegative: boolean;
   isHiddenWhileNoProgress: boolean;
   isDisabledWhileTransition: boolean;
+  width: string;
+  height: string;
 };
 export type SlidesContextType = {
   props: SlidesContextProps;
@@ -34,18 +37,21 @@ function Slides({
   isZIndexNegative = false,
   isHiddenWhileNoProgress = true,
   isDisabledWhileTransition = true,
-  width = '100%',
-  height = '100%',
+  width,
+  height = '100vh',
   className,
   children,
 }: Props) {
   const presentationContext = useContext(PresentationContext);
+  if (width === undefined) {
+    width = presentationContext.props.width;
+  }
   const slidesCount = presentationContext.props.slidesCount;
   const presentationProgress = presentationContext.presentationProgress;
 
   return (
     <div
-      className={`overflow-hidden ${className ?? ''}`}
+      className={add('overflow-hidden', className)}
       style={{
         minWidth: width,
         maxWidth: width,
@@ -56,13 +62,17 @@ function Slides({
       {[
         isDisabledWhileTransition && (
           <motion.div
-            className='absolute fill-parent'
+            className='absolute'
             style={{
               display: isDisabledWhileTransition
                 ? useTransform(presentationProgress, (v) =>
                     Number.isInteger(v) ? 'none' : 'block'
                   )
                 : undefined,
+              minWidth: width,
+              maxWidth: width,
+              minHeight: height,
+              maxHeight: height,
               zIndex: slidesCount,
             }}
           />
@@ -73,6 +83,8 @@ function Slides({
               isZIndexNegative: isZIndexNegative,
               isHiddenWhileNoProgress: isHiddenWhileNoProgress,
               isDisabledWhileTransition: isDisabledWhileTransition,
+              width: width,
+              height: height,
             },
           }}
         >
@@ -87,13 +99,17 @@ function Slides({
 
               return (
                 <motion.div
-                  className='absolute fill-parent'
+                  className='absolute overflow-hidden'
                   style={{
                     display: isHiddenWhileNoProgress
                       ? useTransform(slideProgress, (v) =>
                           v === -1 || v === 1 ? 'none' : 'block'
                         )
                       : undefined,
+                    minWidth: width,
+                    maxWidth: width,
+                    minHeight: height,
+                    maxHeight: height,
                     zIndex: isZIndexNegative ? -i : i,
                   }}
                 >
