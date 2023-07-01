@@ -1,13 +1,13 @@
 'use client';
 
 import { ReactNode, useContext } from 'react';
-import { PresentationContext, PresentationContextType } from './Presentation';
+import { WheelContext, WheelContextType } from './Wheel';
 
 type Props = {
-  children: (context: PresentationContextType) => ReactNode;
+  children: (context: WheelContextType) => ReactNode;
 };
 
 function Piece({ children }: Props) {
-  return children(useContext(PresentationContext));
+  return children(useContext(WheelContext));
 }
 export default Piece;

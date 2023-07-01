@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { ScrollAnimation, ScrollTriggered } from './types';
 import { reshape } from './helper/motion-value-helper';
-import { PresentationContext } from './Presentation';
+import { WheelContext } from './Wheel';
 
 type Props = {
   scrollAnimation?: ScrollAnimation;
@@ -21,12 +21,12 @@ function BackgroundColor({
   height = '100vh',
   className,
 }: Props) {
-  const presentationContext = useContext(PresentationContext);
+  const presentationContext = useContext(WheelContext);
   if (width === undefined) {
     width = presentationContext.props.width;
   }
   const presentationProgress = reshape(
-    presentationContext.presentationProgress,
+    presentationContext.wheelProgress,
     scrollAnimation
   );
 

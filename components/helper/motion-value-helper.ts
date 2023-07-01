@@ -6,8 +6,8 @@ import {
   animate,
   ValueAnimationTransition,
   useSpring,
-} from 'framer-motion';
-import { ScrollAnimation, ScrollTriggered, Direction } from '../types';
+} from "framer-motion";
+import { ScrollAnimation, ScrollTriggered, Direction } from "../types";
 
 export function round(value: MotionValue<number>) {
   return useTransform(value, (v) => Math.round(v));
@@ -18,7 +18,7 @@ export function animateAtIntegers(
   transition?: ValueAnimationTransition<number>
 ) {
   const motion = motionValue(initial);
-  useMotionValueEvent(round(value), 'change', (v) => {
+  useMotionValueEvent(round(value), "change", (v) => {
     animate(motion, v, transition);
   });
   return motion;
@@ -39,9 +39,12 @@ export function reshape(
   }
   return value;
 }
+export function slideProgress(value: MotionValue<number>, i: number) {
+  return useTransform(value, [i - 1, i, i + 1], [-1, 0, 1]);
+}
 export function xy(value: MotionValue<number>, direction: Direction) {
-  const _xy = useTransform(value, (v) => v + '%');
-  return direction === 'left' || direction === 'right'
+  const _xy = useTransform(value, (v) => v + "%");
+  return direction === "left" || direction === "right"
     ? { x: _xy, y: undefined }
     : { x: undefined, y: _xy };
 }

@@ -3,7 +3,7 @@
 import React, { ReactNode, createContext, useContext } from 'react';
 import { motion, MotionValue, useTransform } from 'framer-motion';
 import { add } from './helper/string-helper';
-import { PresentationContext } from './Presentation';
+import { WheelContext } from './Wheel';
 
 export type SlidesContextProps = {
   isZIndexNegative: boolean;
@@ -42,12 +42,12 @@ function Slides({
   className,
   children,
 }: Props) {
-  const presentationContext = useContext(PresentationContext);
+  const presentationContext = useContext(WheelContext);
   if (width === undefined) {
     width = presentationContext.props.width;
   }
   const slidesCount = presentationContext.props.slidesCount;
-  const presentationProgress = presentationContext.presentationProgress;
+  const presentationProgress = presentationContext.wheelProgress;
 
   return (
     <div

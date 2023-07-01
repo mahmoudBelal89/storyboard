@@ -2,13 +2,13 @@
 
 import { ReactNode, useContext } from 'react';
 import { add } from './helper/string-helper';
-import { PresentationContext, PresentationContextType } from './Presentation';
+import { WheelContext, WheelContextType } from './Wheel';
 
 type Props = {
   width?: string;
   height?: string;
   className?: string;
-  children: (context: PresentationContextType) => ReactNode;
+  children: (context: WheelContextType) => ReactNode;
 };
 
 function Board({ width, height = '100vh', className, children }: Props) {
@@ -22,7 +22,7 @@ function Board({ width, height = '100vh', className, children }: Props) {
         maxHeight: height,
       }}
     >
-      {children(useContext(PresentationContext))}
+      {children(useContext(WheelContext))}
     </div>
   );
 }

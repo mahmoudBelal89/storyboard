@@ -3,7 +3,7 @@
 import React, { ReactNode, useContext } from 'react';
 import { ScrollAnimation, ScrollTriggered, Direction } from './types';
 import { DirectionContext } from './DirectionProvider';
-import { PresentationContext } from './Presentation';
+import { WheelContext } from './Wheel';
 import Slides from './Slides';
 import Slide from './Slide';
 import { translateIn } from './transition';
@@ -39,7 +39,7 @@ function CoverSlides({
       className={className}
     >
       {React.Children.toArray(children)
-        .slice(0, useContext(PresentationContext).props.slidesCount)
+        .slice(0, useContext(WheelContext).props.slidesCount)
         .map((v) => (
           <Slide
             scrollAnimation={scrollAnimation}

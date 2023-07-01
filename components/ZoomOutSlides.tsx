@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useContext } from 'react';
 import { ScrollAnimation, ScrollTriggered } from './types';
-import { PresentationContext } from './Presentation';
+import { WheelContext } from './Wheel';
 import Slides from './Slides';
 import Slide from './Slide';
 import { zoomOut } from './transition';
@@ -33,7 +33,7 @@ function ZoomOutSlides({
       className={className}
     >
       {React.Children.toArray(children)
-        .slice(0, useContext(PresentationContext).props.slidesCount)
+        .slice(0, useContext(WheelContext).props.slidesCount)
         .map((v) => (
           <Slide scrollAnimation={scrollAnimation} transitions={zoomOut}>
             {v}

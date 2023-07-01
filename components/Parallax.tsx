@@ -6,7 +6,7 @@ import { ScrollAnimation, Direction } from './types';
 import { DirectionContext } from './DirectionProvider';
 import { add } from './helper/string-helper';
 import { reshape, xy } from './helper/motion-value-helper';
-import { PresentationContext } from './Presentation';
+import { WheelContext } from './Wheel';
 
 type Props = {
   scrollAnimation?: ScrollAnimation;
@@ -30,12 +30,12 @@ function Parallax({
   if (!direction) {
     direction = useContext(DirectionContext) ?? 'up';
   }
-  const presentationContext = useContext(PresentationContext);
+  const presentationContext = useContext(WheelContext);
   if (width === undefined) {
     width = presentationContext.props.width;
   }
   const slidesCount = presentationContext.props.slidesCount;
-  let presentationProgress = presentationContext.presentationProgress;
+  let presentationProgress = presentationContext.wheelProgress;
   if (scrollAnimation) {
     presentationProgress = reshape(presentationProgress, scrollAnimation);
   }
