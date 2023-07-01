@@ -140,10 +140,7 @@ export type SlidesContextType = {
 };
 export const SlidesContext = createContext<SlidesContextType>(null!);
 
-export type SlideIndexContextType = {
-  slideIndex: number;
-};
-export const SlideIndexContext = createContext<SlideIndexContextType>(null!);
+export const SlideIndexContext = createContext<number>(null!);
 
 type SlidesProps = {
   isZIndexNegative?: boolean;
@@ -212,11 +209,7 @@ function Slides({
             .slice(0, slidesCount)
             .map((v, i) => {
               return (
-                <SlideIndexContext.Provider
-                  value={{
-                    slideIndex: i,
-                  }}
-                >
+                <SlideIndexContext.Provider value={i}>
                   {v}
                 </SlideIndexContext.Provider>
               );
@@ -242,8 +235,7 @@ function Slide({
 }: SlideProps) {
   const wheelProgress = useContext(WheelContext).wheelProgress;
   const slidesContext = useContext(SlidesContext);
-  const slideContext = useContext(SlideIndexContext);
-  const slideIndex = slideContext.slideIndex;
+  const slideIndex = useContext(SlideIndexContext);
   let _slideProgress = slideProgress(wheelProgress, slideIndex);
   if (scrollAnimation) {
     _slideProgress = reshape(
