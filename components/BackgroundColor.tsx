@@ -3,7 +3,7 @@
 import { useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
 import { ScrollAnimation, ScrollTriggered } from './types';
-import { reshape } from './helper/motion-value-helper';
+import { animateProgress } from './helper/motion-value-helper';
 import { WheelContext } from './Wheel';
 
 type Props = {
@@ -25,8 +25,8 @@ function BackgroundColor({
   if (width === undefined) {
     width = presentationContext.props.width;
   }
-  const presentationProgress = reshape(
-    presentationContext.wheelProgress,
+  const presentationProgress = animateProgress(
+    presentationContext.slidesProgress,
     scrollAnimation
   );
 

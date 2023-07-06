@@ -3,7 +3,7 @@
 import { ReactNode, useContext } from 'react';
 import { motion, MotionValue } from 'framer-motion';
 import { ScrollAnimation } from './types';
-import { reshape } from './helper/motion-value-helper';
+import { animateProgress } from './helper/motion-value-helper';
 import { SlidesContext, SlideContext } from './Slides';
 
 type Props = {
@@ -19,7 +19,7 @@ function Slide({ scrollAnimation, transitions, children }: Props) {
   const slideContext = useContext(SlideContext);
   let slideProgress = slideContext.slideProgress;
   if (scrollAnimation) {
-    slideProgress = reshape(
+    slideProgress = animateProgress(
       slideProgress,
       scrollAnimation,
       slideContext.slideIndex === 0 ? 0 : -1

@@ -5,7 +5,7 @@ import { motion, useTransform } from 'framer-motion';
 import { ScrollAnimation, Direction } from './types';
 import { DirectionContext } from './DirectionProvider';
 import { add } from './helper/string-helper';
-import { reshape, xy } from './helper/motion-value-helper';
+import { animateProgress, xy } from './helper/motion-value-helper';
 import { WheelContext } from './Wheel';
 
 type Props = {
@@ -35,9 +35,12 @@ function Parallax({
     width = presentationContext.props.width;
   }
   const slidesCount = presentationContext.props.slidesCount;
-  let presentationProgress = presentationContext.wheelProgress;
+  let presentationProgress = presentationContext.slidesProgress;
   if (scrollAnimation) {
-    presentationProgress = reshape(presentationProgress, scrollAnimation);
+    presentationProgress = animateProgress(
+      presentationProgress,
+      scrollAnimation
+    );
   }
 
   const parallaxDelta = -(

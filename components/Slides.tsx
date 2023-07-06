@@ -47,7 +47,7 @@ function Slides({
     width = presentationContext.props.width;
   }
   const slidesCount = presentationContext.props.slidesCount;
-  const presentationProgress = presentationContext.wheelProgress;
+  const presentationProgress = presentationContext.slidesProgress;
 
   return (
     <div
