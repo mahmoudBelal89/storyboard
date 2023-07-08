@@ -19,6 +19,7 @@ import {
   SpringOptions,
 } from 'framer-motion';
 import ContextUser from './ContextUser';
+import { Transition } from './transitions';
 import { animateAtIntegers } from './helper/motion-value-helper';
 
 //------------------------------ PRIVATE
@@ -181,6 +182,7 @@ function ScrollAnimation({ config, children }: ScrollAnimationProps) {
 
 type SlideShowContextType = {
   animationConfig: ScrollAnimationOptions;
+  transitions: [Transition[], Transition[]][];
   isZIndexNegative: boolean;
   isDisabledWhileTransition: boolean;
   width: string;
@@ -191,6 +193,7 @@ const SlideIndexContext = createContext<number>(null!);
 
 type SlideShowProps = {
   animationConfig?: ScrollAnimationOptions;
+  transitions: [Transition[], Transition[]][];
   isZIndexNegative?: boolean;
   isDisabledWhileTransition?: boolean;
   width?: string;
@@ -202,6 +205,7 @@ type SlideShowProps = {
 
 function SlideShow({
   animationConfig = new ScrollTriggered(),
+  transitions,
   isZIndexNegative = false,
   isDisabledWhileTransition = true,
   width,
@@ -255,6 +259,7 @@ function SlideShow({
           <SlideShowContext.Provider
             value={{
               animationConfig: animationConfig,
+              transitions: transitions,
               isZIndexNegative: isZIndexNegative,
               isDisabledWhileTransition: isDisabledWhileTransition,
               width: width,
@@ -280,12 +285,14 @@ function SlideShow({
 //------------------------------ SLIDE
 
 type SlideProps = {
-  transitions: ((slideProgress: MotionValue<number>) => any)[];
+  className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 };
 
-function Slide({ transitions, children }: SlideProps) {
+function Slide({ className, style, children }: SlideProps) {
   const slideShowContext = useContext(SlideShowContext);
+  const transitions = slideShowContext.transitions;
   const index = useContext(SlideIndexContext);
   const slideProgress = useTransform(
     useContext(ScrollAnimationContext).slidesProgress,
@@ -295,16 +302,23 @@ function Slide({ transitions, children }: SlideProps) {
 
   return (
     <motion.div
+      className={className}
       style={{
+        ...style,
         ...ABSOLUTE,
         display: useTransform(slideProgress, (v) =>
           v === -1 || v === 1 ? 'none' : 'block'
         ),
         ...allWidth(slideShowContext.width),
         ...allHeight(slideShowContext.height),
-        ...transitions
+        ...[
+          ...(index !== 0 ? transitions[index - 1][1] : []),
+          ...(index < useContext(WheelContext).slidesCount - 1
+            ? transitions[index][0]
+            : []),
+        ]
           .map((v) => v(slideProgress))
-          .reduce((prev, v) => ({ ...prev, ...v })),
+          .reduce((prev, v) => ({ ...prev, ...v }), {}),
         overflow: 'hidden',
         zIndex: slideShowContext.isZIndexNegative ? -index : index,
       }}

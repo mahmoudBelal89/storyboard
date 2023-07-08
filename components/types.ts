@@ -1,2 +1,2 @@
-export type Direction = 'up' | 'right' | 'down' | 'left';
+export type Direction = 'left' | 'up' | 'right' | 'down';
 export type FadeOptions = 'smoothly' | 'throughColor';
