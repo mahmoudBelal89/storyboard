@@ -10,16 +10,8 @@ import UmbrellaImage from '../resources/images/umbrella.jpg';
 import Wheel, { ScrollLinked, ScrollTriggered } from '@/components/Wheel';
 import {
   COVER_DOWN,
-  COVER_LEFT,
   FADE_SMOOTHLY,
-  FADE_THROUGH_COLOR,
-  PUSH_LEFT,
   PUSH_RIGHT,
-  PUSH_UP,
-  UNCOVER_DOWN,
-  ZOOM_IN,
-  ZOOM_OUT,
-  scaleIn,
 } from '@/components/transitions';
 
 export default function Home() {
@@ -28,8 +20,8 @@ export default function Home() {
       <div className='w-screen h-[300vh] bg-blue-800'></div>
       <Wheel slidesCount={5}>
         <Wheel.SlideShow
-          animationConfig={new ScrollTriggered({ duration: 2 })}
-          transitions={[COVER_DOWN, FADE_SMOOTHLY, FADE_SMOOTHLY, PUSH_RIGHT]}
+          animationConfig={new ScrollTriggered({ duration: 5 })}
+          transitions={[COVER_DOWN, COVER_DOWN, COVER_DOWN, COVER_DOWN]}
           width='50vw'
           height='50vh'
         >

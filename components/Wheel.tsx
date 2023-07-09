@@ -19,15 +19,15 @@ import {
   SpringOptions,
 } from 'framer-motion';
 import ContextUser from './ContextUser';
-import { Transition } from './transitions';
+import { PropTransition, Transition } from './transitions';
 import { animateAtIntegers } from './helper/motion-value-helper';
 
 //------------------------------ PRIVATE
 
 const ABSOLUTE: CSSProperties = {
   position: 'absolute',
-  top: 0,
   left: 0,
+  top: 0,
 };
 const WHEEL_STICKY: CSSProperties = {
   position: 'sticky',
@@ -132,10 +132,10 @@ Wheel.Slide = Slide;
 
 type ScrollAnimationOptions = ScrollTriggered | ScrollLinked;
 class ScrollTriggered {
-  constructor(transition?: ValueAnimationTransition<number>) {
-    this.transition = transition;
+  constructor(framerTransition?: ValueAnimationTransition<number>) {
+    this.framerTransition = framerTransition;
   }
-  transition?: ValueAnimationTransition<number>;
+  framerTransition?: ValueAnimationTransition<number>;
 }
 class ScrollLinked {
   constructor(isSpring = false, springConfig?: SpringOptions) {
@@ -161,7 +161,11 @@ type ScrollAnimationProps = {
 function ScrollAnimation({ config, children }: ScrollAnimationProps) {
   let slidesProgress = useContext(WheelContext).slidesProgress;
   if (config instanceof ScrollTriggered) {
-    slidesProgress = animateAtIntegers(slidesProgress, 0, config.transition);
+    slidesProgress = animateAtIntegers(
+      slidesProgress,
+      0,
+      config.framerTransition
+    );
   } else if (config && config.isSpring) {
     slidesProgress = useSpring(slidesProgress, config.springConfig);
   }
@@ -182,7 +186,7 @@ function ScrollAnimation({ config, children }: ScrollAnimationProps) {
 
 type SlideShowContextType = {
   animationConfig: ScrollAnimationOptions;
-  transitions: [Transition[], Transition[]][];
+  transitions: Transition[];
   isZIndexNegative: boolean;
   isDisabledWhileTransition: boolean;
   width: string;
@@ -193,7 +197,7 @@ const SlideIndexContext = createContext<number>(null!);
 
 type SlideShowProps = {
   animationConfig?: ScrollAnimationOptions;
-  transitions: [Transition[], Transition[]][];
+  transitions: Transition[];
   isZIndexNegative?: boolean;
   isDisabledWhileTransition?: boolean;
   width?: string;
@@ -299,6 +303,12 @@ function Slide({ className, style, children }: SlideProps) {
     [index - 1, index, index + 1],
     [-1, 0, 1]
   );
+  const enter = index !== 0 ? transitions[index - 1][0] : [];
+  const exit =
+    index < useContext(WheelContext).slidesCount - 1
+      ? transitions[index][1]
+      : [];
+  const styleTest = PropTransition.getStyle(slideProgress, enter, exit);
 
   return (
     <motion.div
@@ -311,14 +321,7 @@ function Slide({ className, style, children }: SlideProps) {
         ),
         ...allWidth(slideShowContext.width),
         ...allHeight(slideShowContext.height),
-        ...[
-          ...(index !== 0 ? transitions[index - 1][1] : []),
-          ...(index < useContext(WheelContext).slidesCount - 1
-            ? transitions[index][0]
-            : []),
-        ]
-          .map((v) => v(slideProgress))
-          .reduce((prev, v) => ({ ...prev, ...v }), {}),
+        ...styleTest,
         overflow: 'hidden',
         zIndex: slideShowContext.isZIndexNegative ? -index : index,
       }}

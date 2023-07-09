@@ -4,6 +4,7 @@ import {
   useMotionValueEvent,
   useTransform,
   animate,
+  AnimationPlaybackControls,
   ValueAnimationTransition,
   useSpring,
 } from 'framer-motion';
@@ -16,13 +17,26 @@ export function round(value: MotionValue<number>) {
 export function animateAtIntegers(
   value: MotionValue<number>,
   initial = 0,
-  transition?: ValueAnimationTransition<number>
+  framerTransition?: ValueAnimationTransition<number>
 ) {
-  const motion = motionValue(initial);
+  let prevAnimation: AnimationPlaybackControls | null;
+  const _value = motionValue(initial);
   useMotionValueEvent(round(value), 'change', (v) => {
-    animate(motion, v, transition);
+    if (prevAnimation) {
+      prevAnimation.then(() => {
+        prevAnimation = animate(_value, v, framerTransition);
+        prevAnimation.then(() => {
+          prevAnimation = null;
+        });
+      });
+    } else {
+      prevAnimation = animate(_value, v, framerTransition);
+      prevAnimation.then(() => {
+        prevAnimation = null;
+      });
+    }
   });
-  return motion;
+  return _value;
 }
 function animateProgress(
   value: MotionValue<number>,
@@ -30,7 +44,11 @@ function animateProgress(
   scrollTriggeredInitial?: number
 ) {
   if (config instanceof ScrollTriggered) {
-    value = animateAtIntegers(value, scrollTriggeredInitial, config.transition);
+    value = animateAtIntegers(
+      value,
+      scrollTriggeredInitial,
+      config.framerTransition
+    );
   } else if (config.isSpring) {
     value = useSpring(value, config.springConfig);
   }
