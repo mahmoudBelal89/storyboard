@@ -31,8 +31,6 @@ class PropTransition {
     enter: PropTransition[],
     exit: PropTransition[]
   ) {
-    console.log(enter);
-    console.log(exit);
     let all = enter.map((v) => {
       let mapResult = v;
       exit.forEach((e) => {
@@ -42,7 +40,6 @@ class PropTransition {
       });
       return mapResult;
     });
-    console.log(all);
     all = all.concat(
       exit.filter((v) => {
         let filterResult = true;
@@ -54,8 +51,6 @@ class PropTransition {
         return filterResult;
       })
     );
-    console.log(all);
-    console.log('-------------------------');
     return all.reduce(
       (
         acc: { [key: string]: MotionValue<number> | MotionValue<string> },

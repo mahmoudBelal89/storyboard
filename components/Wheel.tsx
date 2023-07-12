@@ -20,7 +20,7 @@ import {
 } from 'framer-motion';
 import ContextUser from './ContextUser';
 import { PropTransition, Transition } from './transitions';
-import { animateAtIntegers } from './helper/motion-value-helper';
+import { animateToIntegers } from './helper/motion-value-helper';
 
 //------------------------------ PRIVATE
 
@@ -161,7 +161,7 @@ type ScrollAnimationProps = {
 function ScrollAnimation({ config, children }: ScrollAnimationProps) {
   let slidesProgress = useContext(WheelContext).slidesProgress;
   if (config instanceof ScrollTriggered) {
-    slidesProgress = animateAtIntegers(
+    slidesProgress = animateToIntegers(
       slidesProgress,
       0,
       config.framerTransition
