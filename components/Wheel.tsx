@@ -18,9 +18,9 @@ import {
   useSpring,
   SpringOptions,
 } from 'framer-motion';
-import ContextUser from './ContextUser';
-import { PropTransition, Transition } from './transitions';
 import { animateToIntegers } from './helper/motion-value-helper';
+import ContextUser from './ContextUser';
+import { Transition, getStyle } from './transitions';
 
 //------------------------------ PRIVATE
 
@@ -65,7 +65,6 @@ type WheelProps = {
   style?: CSSProperties;
   children: ReactNode;
 };
-
 function Wheel({
   slidesCount = 2,
   transitionRatio = 2,
@@ -90,7 +89,6 @@ function Wheel({
     );
     outputRange.push(i, i);
   }
-  const slidesProgress = useTransform(scrollYProgress, inputRange, outputRange);
 
   return (
     <div
@@ -115,7 +113,11 @@ function Wheel({
             width: width,
             height: height,
             scrollProgress: scrollYProgress,
-            slidesProgress: slidesProgress,
+            slidesProgress: useTransform(
+              scrollYProgress,
+              inputRange,
+              outputRange
+            ),
           }}
         >
           {children}
@@ -127,24 +129,31 @@ function Wheel({
 Wheel.ScrollAnimation = ScrollAnimation;
 Wheel.SlideShow = SlideShow;
 Wheel.Slide = Slide;
+Wheel.Board = Board;
+Wheel.Piece = Piece;
+Wheel.BackgroundColor = BackgroundColor;
 
 //------------------------------ SCROLL-ANIMATION-OPTIONS
 
 type ScrollAnimationOptions = ScrollTriggered | ScrollLinked;
-class ScrollTriggered {
-  constructor(framerTransition?: ValueAnimationTransition<number>) {
-    this.framerTransition = framerTransition;
-  }
+type ScrollTriggered = {
   framerTransition?: ValueAnimationTransition<number>;
-}
-class ScrollLinked {
-  constructor(isSpring = false, springConfig?: SpringOptions) {
-    this.isSpring = isSpring;
-    this.springConfig = springConfig;
-  }
-  isSpring: boolean;
+};
+type ScrollLinked = {
+  isSpring?: boolean; // = false
   springConfig?: SpringOptions;
-}
+};
+const SCROLL_TRIGGERED: ScrollTriggered = {
+  framerTransition: undefined,
+};
+const SCROLL_LINKED: ScrollLinked = {
+  isSpring: false,
+  springConfig: undefined,
+};
+const SMOOTH_SCROLL_LINKED: ScrollLinked = {
+  isSpring: true,
+  springConfig: { bounce: 0.1 },
+};
 
 //------------------------------ SCROLL-ANIMATION
 
@@ -160,14 +169,16 @@ type ScrollAnimationProps = {
 };
 function ScrollAnimation({ config, children }: ScrollAnimationProps) {
   let slidesProgress = useContext(WheelContext).slidesProgress;
-  if (config instanceof ScrollTriggered) {
-    slidesProgress = animateToIntegers(
-      slidesProgress,
-      0,
-      config.framerTransition
-    );
-  } else if (config && config.isSpring) {
-    slidesProgress = useSpring(slidesProgress, config.springConfig);
+  if (config) {
+    if ('framerTransition' in config) {
+      slidesProgress = animateToIntegers(
+        slidesProgress,
+        0,
+        config.framerTransition
+      );
+    } else if ('isSpring' in config && config.isSpring) {
+      slidesProgress = useSpring(slidesProgress, config.springConfig);
+    }
   }
 
   return (
@@ -185,20 +196,17 @@ function ScrollAnimation({ config, children }: ScrollAnimationProps) {
 //------------------------------ SLIDE-SHOW
 
 type SlideShowContextType = {
-  animationConfig: ScrollAnimationOptions;
   transitions: Transition[];
-  isZIndexNegative: boolean;
   isDisabledWhileTransition: boolean;
   width: string;
   height: string;
+  zOrder: number[];
 };
 const SlideShowContext = createContext<SlideShowContextType>(null!);
 const SlideIndexContext = createContext<number>(null!);
 
 type SlideShowProps = {
-  animationConfig?: ScrollAnimationOptions;
   transitions: Transition[];
-  isZIndexNegative?: boolean;
   isDisabledWhileTransition?: boolean;
   width?: string;
   height?: string;
@@ -206,11 +214,8 @@ type SlideShowProps = {
   style?: CSSProperties;
   children: ReactNode;
 };
-
 function SlideShow({
-  animationConfig = new ScrollTriggered(),
   transitions,
-  isZIndexNegative = false,
   isDisabledWhileTransition = true,
   width,
   height = '100vh',
@@ -235,53 +240,60 @@ function SlideShow({
         overflow: 'hidden',
       }}
     >
-      <ScrollAnimation config={animationConfig}>
-        {[
-          isDisabledWhileTransition && (
-            <ContextUser<ScrollAnimationContextType>
-              context={ScrollAnimationContext}
-            >
-              {(value: ScrollAnimationContextType) => {
-                return (
-                  <motion.div
-                    style={{
-                      ...ABSOLUTE,
-                      display: isDisabledWhileTransition
-                        ? useTransform(value.slidesProgress, (v) =>
-                            Number.isInteger(v) ? 'none' : 'block'
-                          )
-                        : undefined,
-                      ...allWidth(width),
-                      ...allHeight(height),
-                      zIndex: slidesCount,
-                    }}
-                  />
-                );
-              }}
-            </ContextUser>
-          ),
-          <SlideShowContext.Provider
-            value={{
-              animationConfig: animationConfig,
-              transitions: transitions,
-              isZIndexNegative: isZIndexNegative,
-              isDisabledWhileTransition: isDisabledWhileTransition,
-              width: width,
-              height: height,
+      {[
+        isDisabledWhileTransition && (
+          <motion.div
+            style={{
+              ...ABSOLUTE,
+              display: isDisabledWhileTransition
+                ? useTransform(
+                    useContext(ScrollAnimationContext).slidesProgress,
+                    (v) => (Number.isInteger(v) ? 'none' : 'block')
+                  )
+                : undefined,
+              ...allWidth(width),
+              ...allHeight(height),
+              zIndex: slidesCount,
             }}
-          >
-            {React.Children.toArray(children)
-              .slice(0, slidesCount)
-              .map((v, i) => {
-                return (
-                  <SlideIndexContext.Provider value={i}>
-                    {v}
-                  </SlideIndexContext.Provider>
-                );
-              })}
-          </SlideShowContext.Provider>,
-        ]}
-      </ScrollAnimation>
+          />
+        ),
+        <SlideShowContext.Provider
+          value={{
+            transitions: transitions,
+            isDisabledWhileTransition: isDisabledWhileTransition,
+            width: width,
+            height: height,
+            zOrder: [false, ...transitions.map((v) => v.isZIndexNegative)].map(
+              (v, i, a) => {
+                let negAfter = 0;
+                for (let _i = i + 1; _i < a.length; _i++) {
+                  if (a[_i]) negAfter++;
+                  else break;
+                }
+                if (!v) return i + negAfter;
+                else {
+                  let negBeforeAndSelf = 1;
+                  for (let _i = i - 1; _i >= 0; _i--) {
+                    if (a[_i]) negBeforeAndSelf++;
+                    else break;
+                  }
+                  return i + negAfter - negBeforeAndSelf;
+                }
+              }
+            ),
+          }}
+        >
+          {React.Children.toArray(children)
+            .slice(0, slidesCount)
+            .map((v, i) => {
+              return (
+                <SlideIndexContext.Provider value={i}>
+                  {v}
+                </SlideIndexContext.Provider>
+              );
+            })}
+        </SlideShowContext.Provider>,
+      ]}
     </div>
   );
 }
@@ -293,7 +305,6 @@ type SlideProps = {
   style?: CSSProperties;
   children: ReactNode;
 };
-
 function Slide({ className, style, children }: SlideProps) {
   const slideShowContext = useContext(SlideShowContext);
   const transitions = slideShowContext.transitions;
@@ -303,12 +314,6 @@ function Slide({ className, style, children }: SlideProps) {
     [index - 1, index, index + 1],
     [-1, 0, 1]
   );
-  const enter = index !== 0 ? transitions[index - 1][0] : [];
-  const exit =
-    index < useContext(WheelContext).slidesCount - 1
-      ? transitions[index][1]
-      : [];
-  const styleTest = PropTransition.getStyle(slideProgress, enter, exit);
 
   return (
     <motion.div
@@ -321,13 +326,118 @@ function Slide({ className, style, children }: SlideProps) {
         ),
         ...allWidth(slideShowContext.width),
         ...allHeight(slideShowContext.height),
-        ...styleTest,
+        ...getStyle(slideProgress, {
+          enter: index !== 0 ? transitions[index - 1].enter : [],
+          exit:
+            index < useContext(WheelContext).slidesCount - 1
+              ? transitions[index].exit
+              : [],
+        }),
         overflow: 'hidden',
-        zIndex: slideShowContext.isZIndexNegative ? -index : index,
+        zIndex: slideShowContext.zOrder[index],
       }}
     >
       {children}
     </motion.div>
+  );
+}
+
+//------------------------------ BOARD & PIECE
+
+type BoardProps = {
+  width?: string;
+  height?: string;
+  className?: string;
+  style?: CSSProperties;
+  children: (context: {
+    wheelContext: WheelContextType;
+    scrollAnimationContext: ScrollAnimationContextType;
+  }) => ReactNode;
+};
+function Board({
+  width,
+  height = '100vh',
+  className,
+  style,
+  children,
+}: BoardProps) {
+  const wheelContext = useContext(WheelContext);
+  if (width === undefined) {
+    width = wheelContext.width;
+  }
+
+  return (
+    <div
+      className={className}
+      style={{
+        position: 'relative',
+        ...style,
+        ...allWidth(width),
+        ...allHeight(height),
+        overflow: 'hidden',
+      }}
+    >
+      {children({
+        wheelContext: wheelContext,
+        scrollAnimationContext: useContext(ScrollAnimationContext),
+      })}
+    </div>
+  );
+}
+
+type PieceProps = {
+  children: (context: {
+    wheelContext: WheelContextType;
+    scrollAnimationContext: ScrollAnimationContextType;
+  }) => ReactNode;
+};
+function Piece({ children }: PieceProps) {
+  return (
+    <>
+      {children({
+        wheelContext: useContext(WheelContext),
+        scrollAnimationContext: useContext(ScrollAnimationContext),
+      })}
+    </>
+  );
+}
+
+//------------------------------ BACKGROUND_COLOR
+
+type BackgroundColorProps = {
+  colors: string[];
+  width?: string;
+  height?: string;
+  className?: string;
+  style?: CSSProperties;
+};
+function BackgroundColor({
+  colors,
+  width,
+  height = '100vh',
+  className,
+  style,
+}: BackgroundColorProps) {
+  const wheelContext = useContext(WheelContext);
+  if (width === undefined) {
+    width = wheelContext.width;
+  }
+
+  return (
+    <motion.div
+      className={className}
+      style={{
+        position: 'relative',
+        ...style,
+        ...allWidth(width),
+        ...allHeight(height),
+        background: useTransform(
+          useContext(ScrollAnimationContext).slidesProgress,
+          Array.from(Array(wheelContext.slidesCount).keys()),
+          colors
+        ),
+      }}
+    />
   );
 }
 
@@ -337,14 +447,17 @@ export default Wheel;
 export type {
   WheelContextType,
   ScrollAnimationOptions,
+  ScrollTriggered,
+  ScrollLinked,
   ScrollAnimationContextType,
   SlideShowContextType,
 };
 export {
   WheelContext,
   ScrollAnimationContext,
-  ScrollTriggered,
-  ScrollLinked,
+  SCROLL_TRIGGERED,
+  SCROLL_LINKED,
+  SMOOTH_SCROLL_LINKED,
   SlideShowContext,
   SlideIndexContext,
 };
