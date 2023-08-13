@@ -42,11 +42,11 @@ function animateToIntegers(
   return _value;
 }
 
-function xy(value: MotionValue<number>, direction: Direction) {
-  const _xy = useTransform(value, (v) => v + '%');
+function xy(value: MotionValue<number>, direction: Direction, unit: string) {
+  const _xy = useTransform(value, (v) => v + unit);
   return direction === 'left' || direction === 'right'
-    ? { x: _xy, y: undefined }
-    : { x: undefined, y: _xy };
+    ? { x: _xy }
+    : { y: _xy };
 }
 
 function animateProgress(

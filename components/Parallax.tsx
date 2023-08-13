@@ -1,59 +1,58 @@
 'use client';
 
-import { ReactNode, useContext } from 'react';
+import { ReactNode, CSSProperties, useContext } from 'react';
 import { motion, useTransform } from 'framer-motion';
-import { ScrollAnimation, Direction } from './types';
-import { DirectionContext } from './DirectionProvider';
-import { add } from './helper/string-helper';
-import { animateProgress, xy } from './helper/motion-value-helper';
-import { WheelContext } from './Wheel';
+import { xy } from './helper/motion-value-helper';
+import { Direction } from './types';
+import { WheelContext, ScrollAnimationContext } from './Wheel';
 
 type Props = {
-  scrollAnimation?: ScrollAnimation;
   direction?: Direction;
-  parallaxSize: string;
+  mainAxisLength: number;
   width?: string;
   height?: string;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 };
-
 function Parallax({
-  scrollAnimation,
-  direction,
-  parallaxSize,
+  direction = 'up',
+  mainAxisLength,
   width,
   height = '100vh',
   className,
+  style,
   children,
 }: Props) {
-  if (!direction) {
-    direction = useContext(DirectionContext) ?? 'up';
-  }
-  const presentationContext = useContext(WheelContext);
+  const wheelContext = useContext(WheelContext);
   if (width === undefined) {
-    width = presentationContext.props.width;
+    width = wheelContext.width;
   }
-  const slidesCount = presentationContext.props.slidesCount;
-  let presentationProgress = presentationContext.slidesProgress;
-  if (scrollAnimation) {
-    presentationProgress = animateProgress(
-      presentationProgress,
-      scrollAnimation
-    );
-  }
+  const slidesCount = wheelContext.slidesCount;
+  const slidesProgress = useContext(ScrollAnimationContext).slidesProgress;
 
-  const parallaxDelta = -(
-    parseFloat(parallaxSize) -
-    (direction === 'left' || direction === 'right'
-      ? parseFloat(width)
-      : parseFloat(height))
-  );
+  let widthNum: number;
+  let widthUnit: string;
+  let heightNum: number;
+  let heightUnit: string;
+  let mainAxisExtraLength: number;
+  if (direction === 'left' || direction === 'right') {
+    const match = width.match(/\d+(\.\d+)?([a-z]+)/)!;
+    widthNum = parseFloat(match[0]);
+    widthUnit = match[1];
+    mainAxisExtraLength = mainAxisLength - widthNum;
+  } else {
+    const match = height.match(/\d+(\.\d+)?([a-z]+)/)!;
+    heightNum = parseFloat(match[0]);
+    heightUnit = match[1];
+    mainAxisExtraLength = mainAxisLength - heightNum;
+  }
 
   return (
     <div
-      className={add('overflow-hidden', className)}
+      className={className}
       style={{
+        ...style,
         minWidth: width,
         maxWidth: width,
         minHeight: height,
@@ -65,24 +64,24 @@ function Parallax({
         style={{
           ...(direction === 'up' || direction === 'down'
             ? {
-                minHeight: parallaxSize,
-                maxHeight: parallaxSize,
+                minHeight: mainAxisLength,
+                maxHeight: mainAxisLength,
                 minWidth: width,
                 maxWidth: width,
               }
             : {
                 minHeight: height,
                 maxHeight: height,
-                minWidth: parallaxSize,
-                maxWidth: parallaxSize,
+                minWidth: mainAxisLength,
+                maxWidth: mainAxisLength,
               }),
           ...xy(
             useTransform(
-              presentationProgress,
+              slidesProgress,
               [0, slidesCount - 1],
               direction === 'left' || direction === 'up'
-                ? [0, parallaxDelta]
-                : [parallaxDelta, 0]
+                ? [0, -mainAxisExtraLength]
+                : [-mainAxisExtraLength, 0]
             ),
             direction
           ),

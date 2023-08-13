@@ -18,8 +18,8 @@ import {
   useSpring,
   SpringOptions,
 } from 'framer-motion';
-import { animateToIntegers } from './helper/motion-value-helper';
-import ContextUser from './ContextUser';
+import { animateToIntegers, xy } from './helper/motion-value-helper';
+import { Direction } from './types';
 import { Transition, getStyle } from './transitions';
 
 //------------------------------ PRIVATE
@@ -132,6 +132,7 @@ Wheel.Slide = Slide;
 Wheel.Board = Board;
 Wheel.Piece = Piece;
 Wheel.BackgroundColor = BackgroundColor;
+Wheel.Parallax = Parallax;
 
 //------------------------------ SCROLL-ANIMATION-OPTIONS
 
@@ -234,6 +235,7 @@ function SlideShow({
       className={className}
       style={{
         position: 'relative',
+        zIndex: 0,
         ...style,
         ...allWidth(width),
         ...allHeight(height),
@@ -371,6 +373,7 @@ function Board({
       className={className}
       style={{
         position: 'relative',
+        zIndex: 0,
         ...style,
         ...allWidth(width),
         ...allHeight(height),
@@ -428,6 +431,7 @@ function BackgroundColor({
       className={className}
       style={{
         position: 'relative',
+        zIndex: 0,
         ...style,
         ...allWidth(width),
         ...allHeight(height),
@@ -438,6 +442,79 @@ function BackgroundColor({
         ),
       }}
     />
+  );
+}
+
+//------------------------------ PARALLAX
+
+type ParallaxProps = {
+  direction?: Direction;
+  mainAxisLength: number;
+  width?: string;
+  height?: string;
+  className?: string;
+  style?: CSSProperties;
+  children: ReactNode;
+};
+function Parallax({
+  direction = 'up',
+  mainAxisLength,
+  width,
+  height = '100vh',
+  className,
+  style,
+  children,
+}: ParallaxProps) {
+  const wheelContext = useContext(WheelContext);
+  if (width === undefined) {
+    width = wheelContext.width;
+  }
+  const unitExp = /cm|mm|in|px|pt|pc|em|ex|ch|rem|vw|vh|vmin|vmax|%/;
+  const [mainAxisExtraLength, mainAxisUnit] =
+    direction === 'left' || direction === 'right'
+      ? [mainAxisLength - parseFloat(width), width.match(unitExp)![0]]
+      : [mainAxisLength - parseFloat(height), height.match(unitExp)![0]];
+
+  return (
+    <div
+      className={className}
+      style={{
+        position: 'relative',
+        zIndex: 0,
+        ...style,
+        ...allWidth(width),
+        ...allHeight(height),
+        overflow: 'hidden',
+      }}
+    >
+      <motion.div
+        style={{
+          ...(direction === 'left' || direction === 'right'
+            ? {
+                ...allWidth(mainAxisLength + mainAxisUnit),
+                ...allHeight(height),
+              }
+            : {
+                ...allWidth(width),
+                ...allHeight(mainAxisLength + mainAxisUnit),
+              }),
+          ...xy(
+            useTransform(
+              useContext(ScrollAnimationContext).slidesProgress,
+              [0, wheelContext.slidesCount - 1],
+              direction === 'left' || direction === 'up'
+                ? [0, -mainAxisExtraLength]
+                : [-mainAxisExtraLength, 0]
+            ),
+            direction,
+            mainAxisUnit
+          ),
+          overflow: 'hidden',
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
   );
 }
 
